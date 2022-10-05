@@ -30,6 +30,9 @@ class Puzzle
     unsigned int x, y;
 
 public:
+    bool IsGoal();
+    void PrintBoard(int puzzle[ROW_COL][ROW_COL]);
+
     // constructor
     Puzzle(int x, int y)
     {
@@ -37,6 +40,7 @@ public:
         setY(y);
     }
 
+    // public functions
     int getX() const
     {
         return this->x;
@@ -47,13 +51,13 @@ public:
         return this->y;
     }
 
-    // public functions
-    void Display(int puzzle[ROW_COL][ROW_COL])
+    void PrintBoard(int puzzle[ROW_COL][ROW_COL])
     {
         for (ROW = 0; ROW < ROW_COL; ROW++)
         {
             for (COL = 0; COL < ROW_COL; COL++)
                 std::cout << ROW + COL << " ";
+            /*CHANGE THIS AREA */
             std::cout << std::endl;
         }
         std::cout << std::endl;
@@ -85,4 +89,31 @@ int main()
     // puzzle.Display(goal);
 
     return 0;
+}
+
+/* puzzle public functions */
+bool Puzzle::IsGoal()
+{
+    for (ROW = 0; ROW < ROW_COL; ROW++)
+    {
+        for (COL = 0; COL < ROW_COL; COL++)
+        {
+            // if any two same positioned items not equal.
+            // if (A[ROW][COL] != Goal[ROW][COL])
+            // this state is not the goal.
+            // return false;
+        }
+    }
+    return true;
+}
+
+void Puzzle::PrintBoard(int puzzle[ROW_COL][ROW_COL])
+{
+    for (ROW = 0; ROW < ROW_COL; ROW++)
+    {
+        for (COL = 0; COL < ROW_COL; COL++)
+            std::cout << ROW + COL << " ";
+        std::cout << std::endl;
+    }
+    std::cout << std::endl;
 }
