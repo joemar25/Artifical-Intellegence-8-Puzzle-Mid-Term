@@ -30,15 +30,9 @@ class Puzzle
     unsigned int x, y;
 
 public:
+    Puzzle(int, int); // constructor
     bool IsGoal();
     void PrintBoard(int puzzle[ROW_COL][ROW_COL]);
-
-    // constructor
-    Puzzle(int x, int y)
-    {
-        setX(x);
-        setY(y);
-    }
 
     // public functions
     int getX() const
@@ -49,18 +43,6 @@ public:
     int getY() const
     {
         return this->y;
-    }
-
-    void PrintBoard(int puzzle[ROW_COL][ROW_COL])
-    {
-        for (ROW = 0; ROW < ROW_COL; ROW++)
-        {
-            for (COL = 0; COL < ROW_COL; COL++)
-                std::cout << ROW + COL << " ";
-            /*CHANGE THIS AREA */
-            std::cout << std::endl;
-        }
-        std::cout << std::endl;
     }
 
 private:
@@ -84,14 +66,20 @@ int main()
         {7, 6, 5}};
 
     Puzzle puzzle(25, 15);
-    std::cout << puzzle.getX() << std::endl;
-    std::cout << puzzle.getY() << std::endl;
-    // puzzle.Display(goal);
+    // std::cout << puzzle.getX() << std::endl;
+    // std::cout << puzzle.getY() << std::endl;
+    puzzle.PrintBoard(goal);
 
     return 0;
 }
 
 /* puzzle public functions */
+Puzzle::Puzzle(int x, int y)
+{
+    setX(x);
+    setY(y);
+}
+
 bool Puzzle::IsGoal()
 {
     for (ROW = 0; ROW < ROW_COL; ROW++)
