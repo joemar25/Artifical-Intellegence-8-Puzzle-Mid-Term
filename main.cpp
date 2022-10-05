@@ -14,18 +14,41 @@
 
 #include <iostream>
 #include <string>
-
 #define ROW_COL 3
+
 unsigned int ROW, COL;
+
+class Node
+{
+    // heuristic counter
+    // manahattan distance counter
+};
 
 class Puzzle
 {
+    // class variables - hidden by default
+    unsigned int x, y;
+
 public:
-    void set(int old_position, int new_position)
+    // constructor
+    Puzzle(int x, int y)
     {
+        setX(x);
+        setY(y);
     }
 
-    void Display(int goal[ROW_COL][ROW_COL])
+    int getX() const
+    {
+        return this->x;
+    }
+
+    int getY() const
+    {
+        return this->y;
+    }
+
+    // public functions
+    void Display(int puzzle[ROW_COL][ROW_COL])
     {
         for (ROW = 0; ROW < ROW_COL; ROW++)
         {
@@ -34,6 +57,17 @@ public:
             std::cout << std::endl;
         }
         std::cout << std::endl;
+    }
+
+private:
+    void setX(const int &x)
+    {
+        this->x = x;
+    }
+
+    void setY(const int &y)
+    {
+        this->y = y;
     }
 };
 
@@ -45,8 +79,10 @@ int main()
         {8, 0, 4},
         {7, 6, 5}};
 
-    Puzzle puzzle;
-    puzzle.Display(goal);
+    Puzzle puzzle(25, 15);
+    std::cout << puzzle.getX() << std::endl;
+    std::cout << puzzle.getY() << std::endl;
+    // puzzle.Display(goal);
 
     return 0;
 }
