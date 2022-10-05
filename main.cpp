@@ -30,11 +30,12 @@ class Puzzle
     unsigned int x, y;
 
 public:
-    Puzzle(int, int); // constructor
-    bool IsGoal();
-    void PrintBoard(int puzzle[ROW_COL][ROW_COL]);
+    // to initialize outside this class
+    Puzzle(int, int);                             // default constructor
+    bool IsGoal(const int puzzle[][ROW_COL]);     // will check if Current State is the Goal State
+    void PrintBoard(const int puzzle[][ROW_COL]); // print the Current State
 
-    // public functions
+    // public functions - test
     int getX() const
     {
         return this->x;
@@ -46,6 +47,7 @@ public:
     }
 
 private:
+    // private function, accesable only inside this class
     void setX(const int &x)
     {
         this->x = x;
@@ -59,16 +61,22 @@ private:
 
 int main()
 {
-
     int goal[ROW_COL][ROW_COL] = {
         {1, 2, 3},
         {8, 0, 4},
         {7, 6, 5}};
 
+    int other[ROW_COL][ROW_COL] = {
+        {0, 2, 4},
+        {8, 1, 7},
+        {3, 6, 5}};
+
     Puzzle puzzle(25, 15);
     // std::cout << puzzle.getX() << std::endl;
     // std::cout << puzzle.getY() << std::endl;
-    puzzle.PrintBoard(goal);
+
+    std::cout << puzzle.IsGoal(goal) << std::endl;
+    std::cout << puzzle.IsGoal(other) << std::endl;
 
     return 0;
 }
@@ -80,28 +88,35 @@ Puzzle::Puzzle(int x, int y)
     setY(y);
 }
 
-bool Puzzle::IsGoal()
+bool Puzzle::IsGoal(const int puzzle[ROW_COL][ROW_COL])
 {
+    int goal[ROW_COL][ROW_COL] = {
+        {1, 2, 3},
+        {8, 0, 4},
+        {7, 6, 5}};
+
     for (ROW = 0; ROW < ROW_COL; ROW++)
     {
         for (COL = 0; COL < ROW_COL; COL++)
         {
             // if any two same positioned items not equal.
-            // if (A[ROW][COL] != Goal[ROW][COL])
-            // this state is not the goal.
-            // return false;
+            if (puzzle[ROW][COL] != goal[ROW][COL])
+                // this state is not the goal.
+                return false;
         }
     }
     return true;
 }
 
-void Puzzle::PrintBoard(int puzzle[ROW_COL][ROW_COL])
+void Puzzle::PrintBoard(const int puzzle[ROW_COL][ROW_COL])
 {
     for (ROW = 0; ROW < ROW_COL; ROW++)
     {
         for (COL = 0; COL < ROW_COL; COL++)
-            std::cout << ROW + COL << " ";
+            std::cout << puzzle[ROW][COL] << " ";
         std::cout << std::endl;
     }
     std::cout << std::endl;
 }
+
+// other class functions
