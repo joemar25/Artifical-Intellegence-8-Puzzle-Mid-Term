@@ -31,20 +31,28 @@ class Puzzle
 
 public:
     // to initialize outside this class
-    Puzzle(int[][ROW_COL]);             // default constructor
-    bool IsValid(const int[][ROW_COL]); // validate array if is in standard
-    int PuzzleValue(int, int) const;    // get Puzzle's Current state
-    bool IsGoal();                      // check if Current State is the Goal State
-    void PrintBoard();                  // print the Current State
+    Puzzle(int[][ROW_COL]);          // default constructor
+    int PuzzleValue(int, int) const; // get Puzzle's Current state
+    bool IsGoal();                   // check if Current State is the Goal State
+    void PrintBoard();               // print the Current State
 
 private:
     // private function, accesable only inside this class
+
+    bool isValid(int num)
+    {
+        return !((num > 8) || (num < 0));
+    }
+
     void setPuzzle(int puzzle[ROW_COL][ROW_COL])
     {
         for (ROW = 0; ROW < ROW_COL; ROW++)
         {
             for (COL = 0; COL < ROW_COL; COL++)
-                this->puzzleValue[ROW][COL] = puzzle[ROW][COL];
+            {
+                if (isValid(puzzle[ROW][COL]))
+                    this->puzzleValue[ROW][COL] = puzzle[ROW][COL];
+            }
         }
     }
 };
