@@ -1,19 +1,18 @@
 /**
  *
  * @file main.cpp
+ *
  * @authors  - Balagtas, Arrlee
  *           - Cardiño, Joemar
  *           - Gomez, Olan
- * @brief
- * @version 0.1
- * @date 2022-10-05
  *
- * @copyright Copyright (c) 2022
+ * @date 2022-10-05
  *
  */
 
 #include <iostream>
 #include <string>
+#include <ctime>
 #define ROW_COL 3
 
 unsigned int ROW, COL;
@@ -53,6 +52,8 @@ private:
 // driver method
 int main()
 {
+    clock_t start, end;
+
     int _puzzl1[ROW_COL][ROW_COL] = {
         {1, 2, 3},
         {8, 0, 4},
@@ -65,10 +66,26 @@ int main()
 
     Puzzle puzzle1(_puzzl1);
     Puzzle puzzle2(_puzzl2);
-    puzzle1.PrintBoard();
-    std::cout << "Is Goal? " << puzzle1.IsGoal() << "\n\n";
-    puzzle2.PrintBoard();
-    std::cout << "Is Goal? " << puzzle2.IsGoal() << std::endl;
+
+    // puzzle 1 test
+    {
+        start = clock();
+        puzzle1.PrintBoard();
+        end = clock();
+
+        std::cout << "T(N) = " << ((double)(end - start)) / CLOCKS_PER_SEC << std::endl;
+        std::cout << "Is Goal? " << puzzle1.IsGoal() << "\n\n";
+    }
+
+    // puzzle 2 test
+    {
+        start = clock();
+        puzzle2.PrintBoard();
+        end = clock();
+
+        std::cout << "T(N) = " << ((double)(end - start)) / CLOCKS_PER_SEC << std::endl;
+        std::cout << "Is Goal? " << puzzle2.IsGoal() << std::endl;
+    }
 
     return 0;
 }
