@@ -28,37 +28,33 @@ class Puzzle
 {
     // class variables - hidden by default
     unsigned int x, y;
+    unsigned int puzzleValue[ROW_COL][ROW_COL];
 
 public:
     // to initialize outside this class
-    Puzzle(int, int);                             // default constructor
-    bool IsGoal(const int puzzle[][ROW_COL]);     // will check if Current State is the Goal State
-    void PrintBoard(const int puzzle[][ROW_COL]); // print the Current State
+    Puzzle(int[][ROW_COL]);                // default constructor
+    bool IsGoal();                         // check if Current State is the Goal State
+    bool IsValid(const int[][ROW_COL]);    // validate array if is in standard
+    void PrintBoard(const int[][ROW_COL]); // print the Current State
 
-    // public functions - test
-    int getX() const
+    int getPuzzleValue(int _r, int _c) const
     {
-        return this->x;
-    }
-
-    int getY() const
-    {
-        return this->y;
+        return puzzleValue[_r][_c];
     }
 
 private:
     // private function, accesable only inside this class
-    void setX(const int &x)
+    void setPuzzle(int puzzle[ROW_COL][ROW_COL])
     {
-        this->x = x;
-    }
-
-    void setY(const int &y)
-    {
-        this->y = y;
+        for (ROW = 0; ROW < ROW_COL; ROW++)
+        {
+            for (COL = 0; COL < ROW_COL; COL++)
+                this->puzzleValue[ROW][COL] = puzzle[ROW][COL];
+        }
     }
 };
 
+// driver method
 int main()
 {
     int goal[ROW_COL][ROW_COL] = {
@@ -71,24 +67,22 @@ int main()
         {8, 1, 7},
         {3, 6, 5}};
 
-    Puzzle puzzle(25, 15);
-    // std::cout << puzzle.getX() << std::endl;
-    // std::cout << puzzle.getY() << std::endl;
-
-    std::cout << puzzle.IsGoal(goal) << std::endl;
-    std::cout << puzzle.IsGoal(other) << std::endl;
+    Puzzle puzzle1(goal);
+    Puzzle puzzle2(other);
+    // puzzle.PrintBoard(goal);
+    std::cout << puzzle1.IsGoal() << std::endl;
+    std::cout << puzzle2.IsGoal() << std::endl;
 
     return 0;
 }
 
 /* puzzle public functions */
-Puzzle::Puzzle(int x, int y)
+Puzzle::Puzzle(int puzzle[ROW_COL][ROW_COL])
 {
-    setX(x);
-    setY(y);
+    this->setPuzzle(puzzle);
 }
 
-bool Puzzle::IsGoal(const int puzzle[ROW_COL][ROW_COL])
+bool Puzzle::IsGoal()
 {
     int goal[ROW_COL][ROW_COL] = {
         {1, 2, 3},
@@ -99,10 +93,8 @@ bool Puzzle::IsGoal(const int puzzle[ROW_COL][ROW_COL])
     {
         for (COL = 0; COL < ROW_COL; COL++)
         {
-            // if any two same positioned items not equal.
-            if (puzzle[ROW][COL] != goal[ROW][COL])
-                // this state is not the goal.
-                return false;
+            if (getPuzzleValue(ROW, COL) != goal[ROW][COL]) // if any two same positioned items not equal
+                return false;                               // this state is not the goal
         }
     }
     return true;
