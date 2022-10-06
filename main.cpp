@@ -13,12 +13,21 @@
 #include <iostream>
 #include <string>
 #include <ctime>
+#include <stack> // for IDS, since DFS is a LIFO based algo and uses Stack
 #define ROW_COL 3
 
 unsigned int ROW, COL, COUNTER;
 
 class Node
 {
+    int y;
+    int x;
+    int parentX;
+    int parentY;
+    float gCost;
+    float hCost;
+    float fCost;
+
     // heuristic counter
     // manahattan distance counter
 };
@@ -67,37 +76,38 @@ int main()
     clock_t start, end;
 
     // intialized puzzle's
-    int _puzzl1[ROW_COL][ROW_COL] = {
-        {1, 2, 3},
-        {8, 0, 4},
-        {7, 6, 5}};
-
-    int _puzzl2[ROW_COL][ROW_COL] = {
-        {0, 2, 4},
-        {8, 1, 7},
-        {3, 6, 5}};
+    int easy[ROW_COL][ROW_COL] = {{1, 3, 4}, {8, 6, 2}, {7, 5, 0}};
+    int medium[ROW_COL][ROW_COL] = {{2, 8, 1}, {4, 3, 0}, {7, 6, 5}};
+    int hard[ROW_COL][ROW_COL] = {{2, 8, 1}, {4, 6, 3}, {7, 5, 0}};
+    int worst[ROW_COL][ROW_COL] = {{5, 6, 7}, {4, 0, 8}, {3, 2, 1}};
+    int prefered[ROW_COL][ROW_COL] = {{1, 2, 3}, {4, 5, 6}, {8, 7, 0}};
 
     // instance of object puzzle
-    Puzzle puzzle1(_puzzl2);
-    Puzzle puzzle2(_puzzl2);
+    Puzzle puzzle1(easy);
+    Puzzle puzzle2(medium);
+    Puzzle puzzle3(hard);
+    Puzzle puzzle4(worst);
+    Puzzle puzzle5(prefered);
 
     // welcome
-    std::cout << "+=================================+" << std::endl;
-    std::cout << "|         8-Puzzel Solver         |" << std::endl;
-    std::cout << "|     Balagtas, Cardiño, Gomez    |" << std::endl;
-    std::cout << "+=================================+" << std::endl;
+    std::cout << "+=================================+\n";
+    std::cout << "|         8-Puzzel Solver         |\n";
+    std::cout << "|     Balagtas, Cardiño, Gomez    |\n";
+    std::cout << "+=================================+\n";
 
     // puzzle 1 test
     {
-        std::cout << "\nInitial State" << std::endl;
+        std::cout << "\nInitial State\n";
         start = clock();
         puzzle1.PrintBoard();
         end = clock();
 
-        std::cout << "T(N) = " << ((double)(end - start)) / CLOCKS_PER_SEC << std::endl;
+        std::cout << "T(N) = " << ((double)(end - start)) / CLOCKS_PER_SEC << "\n";
         std::cout << "Is Goal? " << puzzle1.IsGoal() << "\n\n";
     }
 
+    std::cout << std::endl;
+    system("pause");
     return 0;
 }
 
@@ -128,12 +138,11 @@ int Puzzle::PuzzleValue(int _row, int _col) const
 void Puzzle::PrintBoard()
 {
     COUNTER = 0;
-    // std::cout << " " << this->PuzzleValue(COUNTER) << " *";
     for (ROW = 0; ROW < ROW_COL; ROW++)
     {
         for (COL = 0; COL < ROW_COL; COL++)
             std::cout << "+---";
-        std::cout << "+" << std::endl;
+        std::cout << "+\n";
 
         for (COL = 0; COL < ROW_COL; COL++)
         {
@@ -143,12 +152,12 @@ void Puzzle::PrintBoard()
             COUNTER++;
         }
 
-        std::cout << "|" << std::endl;
+        std::cout << "|\n";
     }
 
     for (COL = 0; COL < ROW_COL; COL++)
         std::cout << "+---";
-    std::cout << "+" << std::endl;
+    std::cout << "+\n";
 }
 
 // other class functions
