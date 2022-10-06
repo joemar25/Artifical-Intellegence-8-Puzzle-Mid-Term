@@ -32,15 +32,11 @@ class Puzzle
 
 public:
     // to initialize outside this class
-    Puzzle(int[][ROW_COL]);                // default constructor
-    bool IsGoal();                         // check if Current State is the Goal State
-    bool IsValid(const int[][ROW_COL]);    // validate array if is in standard
-    void PrintBoard(const int[][ROW_COL]); // print the Current State
-
-    int getPuzzleValue(int _r, int _c) const
-    {
-        return puzzleValue[_r][_c];
-    }
+    Puzzle(int[][ROW_COL]);             // default constructor
+    bool IsValid(const int[][ROW_COL]); // validate array if is in standard
+    int PuzzleValue(int, int) const;    // get Puzzle's Current state
+    bool IsGoal();                      // check if Current State is the Goal State
+    void PrintBoard();                  // print the Current State
 
 private:
     // private function, accesable only inside this class
@@ -69,7 +65,7 @@ int main()
 
     Puzzle puzzle1(goal);
     Puzzle puzzle2(other);
-    // puzzle.PrintBoard(goal);
+    puzzle1.PrintBoard();
     std::cout << puzzle1.IsGoal() << std::endl;
     std::cout << puzzle2.IsGoal() << std::endl;
 
@@ -93,19 +89,24 @@ bool Puzzle::IsGoal()
     {
         for (COL = 0; COL < ROW_COL; COL++)
         {
-            if (getPuzzleValue(ROW, COL) != goal[ROW][COL]) // if any two same positioned items not equal
-                return false;                               // this state is not the goal
+            if (this->PuzzleValue(ROW, COL) != goal[ROW][COL]) // if any two same positioned items not equal
+                return false;                                  // this state is not the goal
         }
     }
     return true;
 }
 
-void Puzzle::PrintBoard(const int puzzle[ROW_COL][ROW_COL])
+int Puzzle::PuzzleValue(int _row, int _col) const
+{
+    return this->puzzleValue[_row][_col];
+}
+
+void Puzzle::PrintBoard()
 {
     for (ROW = 0; ROW < ROW_COL; ROW++)
     {
         for (COL = 0; COL < ROW_COL; COL++)
-            std::cout << puzzle[ROW][COL] << " ";
+            std::cout << this->PuzzleValue(ROW, COL) << " ";
         std::cout << std::endl;
     }
     std::cout << std::endl;
