@@ -53,21 +53,22 @@ private:
 // driver method
 int main()
 {
-    int goal[ROW_COL][ROW_COL] = {
+    int _puzzl1[ROW_COL][ROW_COL] = {
         {1, 2, 3},
         {8, 0, 4},
         {7, 6, 5}};
 
-    int other[ROW_COL][ROW_COL] = {
+    int _puzzl2[ROW_COL][ROW_COL] = {
         {0, 2, 4},
         {8, 1, 7},
         {3, 6, 5}};
 
-    Puzzle puzzle1(goal);
-    Puzzle puzzle2(other);
+    Puzzle puzzle1(_puzzl1);
+    Puzzle puzzle2(_puzzl2);
     puzzle1.PrintBoard();
-    std::cout << puzzle1.IsGoal() << std::endl;
-    std::cout << puzzle2.IsGoal() << std::endl;
+    std::cout << "Is Goal? " << puzzle1.IsGoal() << "\n\n";
+    puzzle2.PrintBoard();
+    std::cout << "Is Goal? " << puzzle2.IsGoal() << std::endl;
 
     return 0;
 }
@@ -109,7 +110,6 @@ void Puzzle::PrintBoard()
             std::cout << this->PuzzleValue(ROW, COL) << " ";
         std::cout << std::endl;
     }
-    std::cout << std::endl;
 }
 
 // other class functions
