@@ -20,16 +20,18 @@ unsigned int ROW, COL, COUNTER;
 
 class Node
 {
-    int y;
-    int x;
-    int parentX;
-    int parentY;
-    float gCost;
-    float hCost;
-    float fCost;
+    int initial;
+    int parent;
 
-    // heuristic counter
-    // manahattan distance counter
+    int MOVE_RIGHT;
+    int MOVE_LEFT;
+    int MOVE_UP;
+    int MOVE_DOWN;
+
+    int dBound;
+    int gCost;
+    int hCost; // manhattan cost
+    int fCost;
 };
 
 class Puzzle
@@ -106,7 +108,7 @@ int main()
         std::cout << "Is Goal? " << puzzle1.IsGoal() << "\n\n";
     }
 
-    std::cout << std::endl;
+    std::cout << "\n";
     system("pause");
     return 0;
 }
