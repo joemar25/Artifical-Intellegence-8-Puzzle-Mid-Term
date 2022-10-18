@@ -14,6 +14,7 @@
 #include <string>
 #include <ctime>
 #include <stack> // for IDS, since DFS is a LIFO based algo and uses Stack
+#include <memory>
 #define ROW_COL 3
 
 unsigned int ROW, COL, COUNTER;
@@ -47,6 +48,11 @@ public:
     int PuzzleValue(int, int) const; // get Puzzle's Current state
     bool IsGoal();                   // check if Current State is the Goal State
     void PrintBoard();               // print the Current State
+
+    ~Puzzle()
+    {
+        // "Deconstructor, This will destroy this Entity/Instance of the object if created within a scope"
+    }
 
 private:
     // private function, accesable only inside this class
@@ -82,15 +88,17 @@ int main()
     int prefered[ROW_COL][ROW_COL] = {{1, 2, 3}, {4, 5, 6}, {8, 7, 0}};
 
     // instance of object puzzle
-    Puzzle puzzle1(easy);
-    Puzzle puzzle2(medium);
-    Puzzle puzzle3(hard);
-    Puzzle puzzle4(worst);
-    Puzzle puzzle5(prefered);
+    std::unique_ptr<Puzzle> puzzle1 = std::make_unique<Puzzle>(easy);
+
+    // if choice is easy then put easy to Puzzle Entity
+    // Puzzle puzzle2(medium);
+    // Puzzle puzzle3(hard);
+    // Puzzle puzzle4(worst);
+    // Puzzle puzzle5(prefered);
 
     // welcome
     std::cout << "+=================================+\n";
-    std::cout << "|         8-Puzzel Solver         |\n";
+    std::cout << "|         8-Puzzle Solver         |\n";
     std::cout << "|     Balagtas, Cardiño, Gomez    |\n";
     std::cout << "+=================================+\n";
 
@@ -98,11 +106,11 @@ int main()
     {
         std::cout << "\nInitial State\n";
         start = clock();
-        puzzle1.PrintBoard();
+        puzzle1->PrintBoard();
         end = clock();
 
         std::cout << "T(N) = " << ((double)(end - start)) / CLOCKS_PER_SEC << "\n";
-        std::cout << "Is Goal? " << puzzle1.IsGoal() << "\n\n";
+        std::cout << "Is Goal? " << puzzle1->IsGoal() << "\n\n";
     }
 
     std::cout << "\n";

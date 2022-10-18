@@ -86,8 +86,8 @@ int main()
 {
     int row = 0, col = 0;
     int state[3][3] = {
-        {1, 3, 2},
-        {8, 0, 4},
+        {1, 3, 0},
+        {8, 2, 4},
         {6, 7, 5},
     };
 
@@ -102,17 +102,13 @@ int main()
         std::cout << std::endl;
     }
 
-    // print spacing
-    std::cout << std::endl;
-    std::cout << std::endl;
-
     // get row and column
     row = getRow(state);
-    col = getRow(state);
+    col = getCol(state);
 
     // uncomment 1 at a time for testing
     // move up
-    std::cout << "Move Up\n";
+    std::cout << "\nMove Up\n";
     MOVE_UP(state, row, col);
     DisplayState(state);
 
