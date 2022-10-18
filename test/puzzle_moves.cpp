@@ -1,13 +1,13 @@
 #include <iostream>
 
-bool isValid(int _area)
+bool IS_VALID(int _area)
 {
     return (_area >= 0 && _area <= 2);
 }
 
-bool isMoveValid(int _row, int _col)
+bool IS_MOVE_VALID(int _row, int _col)
 {
-    return isValid(_row) && isValid(_col);
+    return IS_VALID(_row) && IS_VALID(_col);
 }
 
 void SWAP(int *_x, int *_y)
@@ -19,32 +19,32 @@ void SWAP(int *_x, int *_y)
 void MOVE_UP(int puzzle[3][3], int _row, int _col)
 {
     int _area = _row - 1;
-    if (isMoveValid(_area, _col))
+    if (IS_MOVE_VALID(_area, _col))
         SWAP(&puzzle[_area][_col], &puzzle[_row][_col]);
 }
 
 void MOVE_LEFT(int puzzle[3][3], int _row, int _col)
 {
     int _area = _col - 1;
-    if (isMoveValid(_row, _area))
+    if (IS_MOVE_VALID(_row, _area))
         SWAP(&puzzle[_row][_area], &puzzle[_row][_col]);
 }
 
 void MOVE_DOWN(int puzzle[3][3], int _row, int _col)
 {
     int _area = _row + 1;
-    if (isMoveValid(_area, _col))
+    if (IS_MOVE_VALID(_area, _col))
         SWAP(&puzzle[_area][_col], &puzzle[_row][_col]);
 }
 
 void MOVE_RIGHT(int puzzle[3][3], int _row, int _col)
 {
     int _area = _col + 1;
-    if (isMoveValid(_row, _area))
+    if (IS_MOVE_VALID(_row, _area))
         SWAP(&puzzle[_row][_area], &puzzle[_row][_col]);
 }
 
-void DisplayState(int puzzle[3][3])
+void DISPLAY_STATE(int puzzle[3][3])
 {
     for (unsigned int i = 0; i < 3; i++)
     {
@@ -54,7 +54,7 @@ void DisplayState(int puzzle[3][3])
     }
 }
 
-int getRow(int puzzle[3][3])
+int GET_ROW(int puzzle[3][3])
 {
     int row = 0;
     for (unsigned int i = 0; i < 3; i++)
@@ -68,7 +68,7 @@ int getRow(int puzzle[3][3])
     return row;
 }
 
-int getCol(int puzzle[3][3])
+int GET_COL(int puzzle[3][3])
 {
     int col = 0;
     for (unsigned int i = 0; i < 3; i++)
@@ -103,26 +103,26 @@ int main()
     }
 
     // get row and column
-    row = getRow(state);
-    col = getCol(state);
+    row = GET_ROW(state);
+    col = GET_COL(state);
 
     // uncomment 1 at a time for testing
     // move up
     std::cout << "\nMove Up\n";
     MOVE_UP(state, row, col);
-    DisplayState(state);
+    DISPLAY_STATE(state);
 
     // std::cout << "\nMove Left\n";
     // MOVE_LEFT(state, row, col);
-    // DisplayState(state);
+    // DISPLAY_STATE(state);
 
     // std::cout << "\nMove Down\n";
     // MOVE_DOWN(state, row, col);
-    // DisplayState(state);
+    // DISPLAY_STATE(state);
 
     // std::cout << "\nMove Right\n";
     // MOVE_RIGHT(state, row, col);
-    // DisplayState(state);
+    // DISPLAY_STATE(state);
 
     std::cout << "\n";
     std::system("PAUSE");

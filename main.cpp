@@ -37,112 +37,133 @@ class Node
 
 class Puzzle
 {
-    // class variables - hidden by default
+    /* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
+     *              Class variables, located and can be used only in this class            *
+     *                               - private by default                                  *
+     * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
     unsigned int x, y;
-    unsigned int puzzleValue[ROW_COL][ROW_COL];
+    unsigned int state[ROW_COL][ROW_COL];
     unsigned int goal[ROW_COL][ROW_COL] = {{1, 2, 3}, {8, 0, 4}, {7, 6, 5}};
 
 public:
-    // to initialize outside this class
-    Puzzle(int[][ROW_COL]);          // default constructor
-    int PuzzleValue(int, int) const; // get Puzzle's Current state
-    bool IsGoal();                   // check if Current State is the Goal State
-    void PrintBoard();               // print the Current State
+    /* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
+     *              Public functions, located and can be used outside this class           *
+     * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 
+    /**
+     * @brief Construct a new Puzzle object
+     *
+     */
+    Puzzle() {}
+    Puzzle(int _state[ROW_COL][ROW_COL])
+    {
+        this->SET_PUZZLE(_state);
+    }
+
+    /* functions declaration */
+    bool IS_GOAL(int[3][3]);
+    void DISPLAY_STATE(int[3][3]);
+
+    // get blank (x,y)
+    int GET_ROW(int[3][3]);
+    int GET_COL(int[3][3]);
+
+    // moves
+    void MOVE_UP(int[3][3]);
+    void MOVE_LEFT(int[3][3]);
+    void MOVE_DOWN(int[3][3]);
+    void MOVE_RIGHT(int[3][3]);
+
+    /**
+     * @brief Destroy the Puzzle object
+     * Note: This will destroy this Entity/Instance of the object if created within a scope"
+     */
     ~Puzzle()
     {
-        // "Deconstructor, This will destroy this Entity/Instance of the object if created within a scope"
+        std::cout << "Destroyed\n";
     }
 
 private:
-    // private function, accesable only inside this class
-    bool isValid(int num)
+    /* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
+     *              Private functions, located and used only inside this class             *
+     * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
+    bool IS_VALID(int);
+    bool IS_MOVE_VALID(int, int);
+    void SWAP(int *, int *);
+
+    bool IS_VALID_PUZZLE_NUMBER(int num)
     {
         return !((num > 8) || (num < 0));
     }
 
-    void setPuzzle(int puzzle[ROW_COL][ROW_COL])
+    void SET_PUZZLE(int puzzle[ROW_COL][ROW_COL])
     {
         for (ROW = 0; ROW < ROW_COL; ROW++)
         {
             for (COL = 0; COL < ROW_COL; COL++)
             {
-                if (isValid(puzzle[ROW][COL]))
-                    this->puzzleValue[ROW][COL] = puzzle[ROW][COL];
+                if (IS_VALID_PUZZLE_NUMBER(puzzle[ROW][COL]))
+                    this->state[ROW][COL] = puzzle[ROW][COL];
             }
         }
     }
 };
 
-// driver method
 int main()
 {
+    // instance of object puzzle
+    std::unique_ptr<Puzzle> puzzle = std::make_unique<Puzzle>();
+
     // clock/time variables
     clock_t start, end;
 
     // intialized puzzle's
     int easy[ROW_COL][ROW_COL] = {{1, 3, 4}, {8, 6, 2}, {7, 5, 0}};
-    int medium[ROW_COL][ROW_COL] = {{2, 8, 1}, {4, 3, 0}, {7, 6, 5}};
-    int hard[ROW_COL][ROW_COL] = {{2, 8, 1}, {4, 6, 3}, {7, 5, 0}};
-    int worst[ROW_COL][ROW_COL] = {{5, 6, 7}, {4, 0, 8}, {3, 2, 1}};
-    int prefered[ROW_COL][ROW_COL] = {{1, 2, 3}, {4, 5, 6}, {8, 7, 0}};
 
-    // instance of object puzzle
-    std::unique_ptr<Puzzle> puzzle1 = std::make_unique<Puzzle>(easy);
-
-    // if choice is easy then put easy to Puzzle Entity
-    // Puzzle puzzle2(medium);
-    // Puzzle puzzle3(hard);
-    // Puzzle puzzle4(worst);
-    // Puzzle puzzle5(prefered);
-
-    // welcome
-    std::cout << "+=================================+\n";
-    std::cout << "|         8-Puzzle Solver         |\n";
-    std::cout << "|     Balagtas, Cardiño, Gomez    |\n";
-    std::cout << "+=================================+\n";
-
-    // puzzle 1 test
-    {
-        std::cout << "\nInitial State\n";
-        start = clock();
-        puzzle1->PrintBoard();
-        end = clock();
-
-        std::cout << "T(N) = " << ((double)(end - start)) / CLOCKS_PER_SEC << "\n";
-        std::cout << "Is Goal? " << puzzle1->IsGoal() << "\n\n";
-    }
+    // puzzle test
+    std::cout << "\nInitial State\n";
+    puzzle->DISPLAY_STATE(easy);
+    puzzle->MOVE_UP(easy);
+    puzzle->DISPLAY_STATE(easy);
 
     std::cout << "\n";
     system("pause");
+    // std::cout << "\033[2J\033[1;1H"; // clear screen for both windows/linux
     return 0;
 }
 
-/* puzzle public functions */
-Puzzle::Puzzle(int puzzle[ROW_COL][ROW_COL])
+/* puzzle private functions */
+bool Puzzle::IS_VALID(int _area)
 {
-    this->setPuzzle(puzzle);
+    return (_area >= 0 && _area <= 2);
 }
 
-bool Puzzle::IsGoal()
+bool Puzzle::IS_MOVE_VALID(int _row, int _col)
+{
+    return IS_VALID(_row) && IS_VALID(_col);
+}
+
+void Puzzle::SWAP(int *_x, int *_y)
+{
+    *_y = *_x;
+    *_x = 0;
+}
+
+/* puzzle public functions */
+bool Puzzle::IS_GOAL(int puzzle[3][3])
 {
     for (ROW = 0; ROW < ROW_COL; ROW++)
     {
         for (COL = 0; COL < ROW_COL; COL++)
         {
-            if (this->PuzzleValue(ROW, COL) != goal[ROW][COL]) // if any two same positioned items not equal
-                return false;                                  // this state is not the goal
+            if (puzzle[ROW][COL] != goal[ROW][COL]) // if any two same positioned items not equal
+                return false;                       // this state is not the goal
         }
     }
     return true;
 }
 
-int Puzzle::PuzzleValue(int _row, int _col) const
-{
-    return this->puzzleValue[_row][_col];
-}
-
-void Puzzle::PrintBoard()
+void Puzzle::DISPLAY_STATE(int puzzle[3][3])
 {
     COUNTER = 0;
     for (ROW = 0; ROW < ROW_COL; ROW++)
@@ -154,7 +175,7 @@ void Puzzle::PrintBoard()
         for (COL = 0; COL < ROW_COL; COL++)
         {
             // to string is just temporary
-            std::string result = (this->PuzzleValue(ROW, COL) == 0) ? " " : std::to_string(this->PuzzleValue(ROW, COL));
+            std::string result = (puzzle[ROW][COL] == 0) ? " " : std::to_string(puzzle[ROW][COL]);
             std::cout << "| " << result << " ";
             COUNTER++;
         }
@@ -165,6 +186,74 @@ void Puzzle::PrintBoard()
     for (COL = 0; COL < ROW_COL; COL++)
         std::cout << "+---";
     std::cout << "+\n";
+}
+
+int Puzzle::GET_ROW(int puzzle[3][3])
+{
+    int row = 0;
+    for (unsigned int i = 0; i < 3; i++)
+    {
+        for (unsigned int j = 0; j < 3; j++)
+        {
+            if (puzzle[i][j] == 0)
+                row = i;
+        }
+    }
+    return row;
+}
+
+int Puzzle::GET_COL(int puzzle[3][3])
+{
+    int col = 0;
+    for (unsigned int i = 0; i < 3; i++)
+    {
+        for (unsigned int j = 0; j < 3; j++)
+        {
+            if (puzzle[i][j] == 0)
+                col = j;
+        }
+    }
+    return col;
+}
+
+void Puzzle::MOVE_UP(int puzzle[3][3])
+{
+    int _row = GET_ROW(puzzle);
+    int _col = GET_COL(puzzle);
+
+    int _area = _row - 1;
+    if (IS_MOVE_VALID(_area, _col))
+        SWAP(&puzzle[_area][_col], &puzzle[_row][_col]);
+}
+
+void Puzzle::MOVE_LEFT(int puzzle[3][3])
+{
+    int _row = GET_ROW(puzzle);
+    int _col = GET_COL(puzzle);
+
+    int _area = _col - 1;
+    if (IS_MOVE_VALID(_row, _area))
+        SWAP(&puzzle[_row][_area], &puzzle[_row][_col]);
+}
+
+void Puzzle::MOVE_DOWN(int puzzle[3][3])
+{
+    int _row = GET_ROW(puzzle);
+    int _col = GET_COL(puzzle);
+
+    int _area = _row + 1;
+    if (IS_MOVE_VALID(_area, _col))
+        SWAP(&puzzle[_area][_col], &puzzle[_row][_col]);
+}
+
+void Puzzle::MOVE_RIGHT(int puzzle[3][3])
+{
+    int _row = GET_ROW(puzzle);
+    int _col = GET_COL(puzzle);
+
+    int _area = _col + 1;
+    if (IS_MOVE_VALID(_row, _area))
+        SWAP(&puzzle[_row][_area], &puzzle[_row][_col]);
 }
 
 // other class functions
