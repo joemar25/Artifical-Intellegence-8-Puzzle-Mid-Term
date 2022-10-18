@@ -39,10 +39,7 @@ class Puzzle
     // class variables - hidden by default
     unsigned int x, y;
     unsigned int puzzleValue[ROW_COL][ROW_COL];
-    unsigned int goal[ROW_COL][ROW_COL] = {
-        {1, 2, 3},
-        {8, 0, 4},
-        {7, 6, 5}};
+    unsigned int goal[ROW_COL][ROW_COL] = {{1, 2, 3}, {8, 0, 4}, {7, 6, 5}};
 
 public:
     // to initialize outside this class
