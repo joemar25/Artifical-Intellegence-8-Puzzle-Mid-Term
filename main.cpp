@@ -74,13 +74,18 @@ public:
     void MOVE_DOWN(int[3][3]);
     void MOVE_RIGHT(int[3][3]);
 
+    int **getPuzzle()
+    {
+        // return state;
+    }
+
     /**
      * @brief Destroy the Puzzle object
      * Note: This will destroy this Entity/Instance of the object if created within a scope"
      */
     ~Puzzle()
     {
-        std::cout << "Destroyed\n";
+        std::cout << "Destroyed\n"; // uncomment after test
     }
 
 private:
@@ -111,14 +116,14 @@ private:
 
 int main()
 {
-    // instance of object puzzle
-    std::unique_ptr<Puzzle> puzzle = std::make_unique<Puzzle>();
-
     // clock/time variables
     clock_t start, end;
 
     // intialized puzzle's
     int easy[ROW_COL][ROW_COL] = {{1, 3, 4}, {8, 6, 2}, {7, 5, 0}};
+    // instance of object puzzle
+    std::unique_ptr<Puzzle> puzzle = std::make_unique<Puzzle>();
+    std::unique_ptr<Puzzle> ez_puzzle = std::make_unique<Puzzle>(easy);
 
     // puzzle test
     std::cout << "\nInitial State\n";
@@ -128,7 +133,7 @@ int main()
 
     std::cout << "\n";
     system("pause");
-    // std::cout << "\033[2J\033[1;1H"; // clear screen for both windows/linux
+    std::cout << "\033[2J\033[1;1H";
     return 0;
 }
 
