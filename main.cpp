@@ -15,24 +15,32 @@
 #include <ctime>
 #include <stack> // for IDS, since DFS is a LIFO based algo and uses Stack
 #include <memory>
-#define ROW_COL 3
 
-unsigned int ROW, COL, COUNTER, _index;
+#define __row_col_ 3 * 3
+unsigned int _index;
 
 class Node
 {
-    int initial;
-    int parent;
+    Node *parent;
 
-    int MOVE_RIGHT;
-    int MOVE_LEFT;
-    int MOVE_UP;
-    int MOVE_DOWN;
+    // stores puzzle
+    int state[__row_col_];
 
+    // stores the number of misplaced tiles
+    int cost;
+
+    // stores the number of moves so far
+    int level;
+
+    // depth bound
     int dBound;
+    // manhattan cost
     int gCost;
-    int hCost; // manhattan cost
+    int hCost;
     int fCost;
+
+public:
+    void IDS();
 };
 
 class Puzzle
@@ -41,17 +49,17 @@ class Puzzle
      *              Class variables, located and can be used only in this class            *
      *                               - private by default                                  *
      * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
-    unsigned int state[ROW_COL * ROW_COL];
-    unsigned int goal[ROW_COL * ROW_COL] = {1, 2, 3, 8, 0, 4, 7, 6, 5};
+    unsigned int state[__row_col_];
+    unsigned int goal[__row_col_] = {1, 2, 3, 8, 0, 4, 7, 6, 5};
+    // note: both array above is inside the stack, no need to worry about memory management
 
-private:
     /* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
      *              Private functions, located and used only inside this class             *
      * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
-    bool IS_VALID(int);
-    bool IS_MOVE_VALID(int, int);
-    void SWAP(int *, int *);
-    int GET_BLANK(int[]);
+    bool isValid(int);
+    bool isMoveValid(int, int);
+    void swap(int *, int *);
+    int getBlank(int[]);
 
 public:
     /* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
@@ -65,10 +73,8 @@ public:
     Puzzle() {}
 
     /* functions declaration */
-    bool IS_GOAL(int[]);
-    void DISPLAY_STATE(int[]);
-
-    // moves
+    bool isGoal(int[]);
+    void displayState(int[]);
     void MOVE_UP(int[]);
     void MOVE_LEFT(int[]);
     void MOVE_DOWN(int[]);
@@ -77,33 +83,32 @@ public:
     /**
      * @brief Destroy the Puzzle object
      * Note: This will destroy this Entity/Instance of the object if created within a scope"
+     *
+     *       std::cout << "Destroyed\n"; -> use for test
      */
-    ~Puzzle()
-    {
-        std::cout << "Destroyed\n"; // uncomment after test
-    }
+    ~Puzzle() {}
 };
 
-/* puzzle private functions */
-bool Puzzle::IS_VALID(int _area)
+/* CLASS::PUZZLE private functions */
+bool Puzzle::isValid(int _area)
 {
     return (_area >= 0 && _area <= 2);
 }
 
-bool Puzzle::IS_MOVE_VALID(int _row, int _col)
+bool Puzzle::isMoveValid(int _row, int _col)
 {
-    return IS_VALID(_row) && IS_VALID(_col);
+    return isValid(_row) && isValid(_col);
 }
 
-void Puzzle::SWAP(int *_x, int *_y)
+void Puzzle::swap(int *_x, int *_y)
 {
-    *_y = *_x; // _puzzle[_pos_blank]    := _puzzle[_pos_with_val]
-    *_x = 0;   // _puzzle[_pos_with_val] := 0
+    *_y = *_x; // _puzzle[_pos_blank]    := _puzzle[_pos_with_val]  //
+    *_x = 0;   // _puzzle[_pos_with_val] := 0                       //
 }
 
-int Puzzle::GET_BLANK(int _puzzle[])
+int Puzzle::getBlank(int _puzzle[])
 {
-    for (int i = 0; i < 9; i++)
+    for (int i = 0; i < __row_col_; i++)
     {
         if (_puzzle[i] == 0)
             return i;
@@ -111,10 +116,10 @@ int Puzzle::GET_BLANK(int _puzzle[])
     return 0;
 }
 
-/* puzzle public functions */
-bool Puzzle::IS_GOAL(int puzzle[])
+/* CLASS::PUZZLE public functions */
+bool Puzzle::isGoal(int puzzle[])
 {
-    for (_index = 0; _index < ROW_COL * ROW_COL; _index++)
+    for (_index = 0; _index < __row_col_; _index++)
     {
         if (puzzle[_index] != goal[_index]) // if any two same positioned items not equal
             return false;                   // this state is not the goal
@@ -122,39 +127,39 @@ bool Puzzle::IS_GOAL(int puzzle[])
     return true;
 }
 
-void Puzzle::DISPLAY_STATE(int puzzle[])
+void Puzzle::displayState(int puzzle[])
 {
-    for (unsigned int i = 0; i < 9; i++)
+    for (unsigned int i = 0; i < __row_col_; i++)
         std::cout << ((i % 3 == 0) ? "\n" : " ") << puzzle[i];
     std::cout << "\n";
 }
 
 void Puzzle::MOVE_UP(int _puzzle[])
 {
-    int _index = GET_BLANK(_puzzle);
+    int _index = getBlank(_puzzle);
     if (_index > 2)
-        SWAP(&_puzzle[_index - 3], &_puzzle[_index]);
+        swap(&_puzzle[_index - 3], &_puzzle[_index]);
 }
 
 void Puzzle::MOVE_LEFT(int _puzzle[])
 {
-    int _index = GET_BLANK(_puzzle);
-    if (_index % 3)
-        SWAP(&_puzzle[_index - 1], &_puzzle[_index]);
+    int _index = getBlank(_puzzle);
+    if (_index % 3 != 0)
+        swap(&_puzzle[_index - 1], &_puzzle[_index]);
 }
 
 void Puzzle::MOVE_DOWN(int _puzzle[])
 {
-    int _index = GET_BLANK(_puzzle);
+    int _index = getBlank(_puzzle);
     if (_index < 6)
-        SWAP(&_puzzle[_index + 3], &_puzzle[_index]);
+        swap(&_puzzle[_index + 3], &_puzzle[_index]);
 }
 
 void Puzzle::MOVE_RIGHT(int _puzzle[])
 {
-    int _index = GET_BLANK(_puzzle);
-    if (_index < 6)
-        SWAP(&_puzzle[_index + 3], &_puzzle[_index]);
+    int _index = getBlank(_puzzle);
+    if (_index != 2 && _index != 5 && _index != 8)
+        swap(&_puzzle[_index + 1], &_puzzle[_index]);
 }
 
 int main()
@@ -163,15 +168,21 @@ int main()
     clock_t start, end;
 
     // intialized puzzle's
-    int easy[ROW_COL * ROW_COL] = {1, 3, 4, 8, 6, 2, 7, 5, 0};
+    int easy[__row_col_] = {
+        1, 3, 4,
+        8, 2, 7,
+        6, 5, 0};
+
     // instance of object puzzle
     std::unique_ptr<Puzzle> puzzle = std::make_unique<Puzzle>();
 
     // puzzle test
     std::cout << "\nInitial State\n";
-    puzzle->DISPLAY_STATE(easy);
-    puzzle->MOVE_UP(easy);
-    puzzle->DISPLAY_STATE(easy);
+    puzzle->displayState(easy);
+    puzzle->MOVE_RIGHT(easy);
+    puzzle->displayState(easy);
+
+    // Solve(state, goal);
 
     std::cout << "\n";
     system("pause");
