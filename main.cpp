@@ -20,6 +20,34 @@
 #define __row_col_ 3 * 3
 unsigned int _index;
 
+// global functions
+void printChoices()
+{
+    std::cout << "\033[2J\033[1;1H";
+    std::cout << "\t* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *\n";
+    std::cout << "\t*                                                                                                           *\n";
+    std::cout << "\t*                                         _P u z z l e   C h o i c e s_                                     *\n";
+    std::cout << "\t*                                                                                                           *\n";
+    std::cout << "\t*                                                                                                           *\n";
+    std::cout << "\t*         easy                  medium                hard                 worst             preferred      *\n";
+    std::cout << "\t*      +---+---+---+        +---+---+---+        +---+---+---+        +---+---+---+        +---+---+---+    *\n";
+    std::cout << "\t*      | 1 | 3 | 4 |        | 2 | 8 | 1 |        | 2 | 8 | 1 |        | 5 | 6 | 7 |        | 1 | 2 | 3 |    *\n";
+    std::cout << "\t*      +---+---+---+        +---+---+---+        +---+---+---+        +---+---+---+        +---+---+---+    *\n";
+    std::cout << "\t*   a) | 8 | 6 | 2 |    b)  | 4 | 3 |   |    c)  | 4 | 6 | 3 |    d)  | 4 |   | 8 |    e)  | 4 | 5 | 6 |    *\n";
+    std::cout << "\t*      +---+---+---+        +---+---+---+        +---+---+---+        +---+---+---+        +---+---+---+    *\n";
+    std::cout << "\t*      | 7 | 5 |   |        | 7 | 6 | 5 |        | 7 | 5 |   |        | 3 | 2 | 1 |        | 8 | 7 |   |    *\n";
+    std::cout << "\t*      +---+---+---+        +---+---+---+        +---+---+---+        +---+---+---+        +---+---+---+    *\n";
+    std::cout << "\t*                                                                                                           *\n";
+    std::cout << "\t*                                                                                                           *\n";
+    std::cout << "\t*                                                                                                           *\n";
+    std::cout << "\t*   Note: user can choose a as 1 as input                                                                   *\n";
+    std::cout << "\t*         user can choose b as 2                                                                            *\n";
+    std::cout << "\t*                    ...  c as 3                                                                            *\n";
+    std::cout << "\t*                     ..  d as 4                                                                            *\n";
+    std::cout << "\t*                      .  e as 5                                                                            *\n";
+    std::cout << "\t*                                                                                                           *\n";
+    std::cout << "\t* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *\n";
+}
 class Node
 {
     Node *parent;
@@ -173,6 +201,8 @@ void Puzzle::MOVE_RIGHT(int _puzzle[])
 
 int main()
 {
+    printChoices();
+
     // clock/time variables
     clock_t start, end;
 
@@ -196,6 +226,5 @@ int main()
     std::cout << "\n";
     std::cout << "Press ENTER to continue...";
     std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
-    std::cout << "\033[2J\033[1;1H";
     return 0;
 }
