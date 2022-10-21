@@ -15,6 +15,7 @@
 #include <ctime>
 #include <stack> // for IDS, since DFS is a LIFO based algo and uses Stack
 #include <memory>
+#include <limits> // ENTER continue
 
 #define __row_col_ 3 * 3
 unsigned int _index;
@@ -129,9 +130,17 @@ bool Puzzle::isGoal(int puzzle[])
 
 void Puzzle::displayState(int puzzle[])
 {
-    for (unsigned int i = 0; i < __row_col_; i++)
-        std::cout << ((i % 3 == 0) ? "\n" : " ") << puzzle[i];
-    std::cout << "\n";
+    std::cout << "+---+---+---+\n";
+    for (unsigned int i = 0; i < 3; i++)
+    {
+        std::cout << "|";
+        for (unsigned int j = 1; j < 4; j++)
+        {
+            std::cout << " " << puzzle[i + j] << " |";
+        }
+        // std::cout << ((i % 3 == 0) ? "+---+---+---+\n" : " ") << puzzle[i];
+        std::cout << "\n+---+---+---+\n";
+    }
 }
 
 void Puzzle::MOVE_UP(int _puzzle[])
@@ -170,8 +179,8 @@ int main()
     // intialized puzzle's
     int easy[__row_col_] = {
         1, 3, 4,
-        8, 2, 7,
-        6, 5, 0};
+        8, 0, 2,
+        6, 5, 7};
 
     // instance of object puzzle
     std::unique_ptr<Puzzle> puzzle = std::make_unique<Puzzle>();
@@ -185,7 +194,8 @@ int main()
     // Solve(state, goal);
 
     std::cout << "\n";
-    system("pause");
+    std::cout << "Press ENTER to continue...";
+    std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
     std::cout << "\033[2J\033[1;1H";
     return 0;
 }
