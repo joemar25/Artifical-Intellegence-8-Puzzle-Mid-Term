@@ -83,7 +83,7 @@ int main()
     // int goal[9] = {1, 2, 3, 8, 0, 4, 7, 6, 5};
     int goal[9] = {2, 0, 4, 8, 1, 6, 3, 7, 5};
 
-    int manhattan_cost = distancesum(test, goal, 9);
+    int manhattan_cost = manhattanDistance(test, goal);
     std::cout << manhattan_cost << "\n";
 
     std::cout << "Press ENTER to continue...";
