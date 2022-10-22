@@ -50,7 +50,7 @@ void printChoices()
 }
 class Node
 {
-    Node *node;
+    Node *parent;
 
     // stores puzzle
     int state[__row_col_];
@@ -296,33 +296,50 @@ int main()
 
     // puzzle move, display, then calculate h(n)
     puzzle->MOVE_UP(test); // available, h() = 4
+    // puzzle->MOVE_LEFT(test); // available, h() = 6
+    // puzzle->MOVE_DOWN(test); // unavailable, h() = 5
+    // puzzle->MOVE_RIGHT(test); // available, h() = 0
     puzzle->displayState(test);
     std::cout << "-> move: Up\n";
     std::cout << "-> h(n) = " << puzzle->h(test) << "\n\n";
 
     puzzle->MOVE_UP(test); // available, h() = 3
+    // puzzle->MOVE_LEFT(test); // available, h() = 5
+    // puzzle->MOVE_DOWN(test); // explored, h() = 5
+    // puzzle->MOVE_RIGHT(test); // available, h() = 5
     puzzle->displayState(test);
     std::cout << "-> move: Left\n";
     std::cout << "-> h(n) = " << puzzle->h(test) << "\n\n";
 
+    // puzzle->MOVE_UP(test); // unavailable, h() = 0
     puzzle->MOVE_LEFT(test); // available, h() = 2
+    // puzzle->MOVE_DOWN(test); // explored, h() = 0
+    // puzzle->MOVE_RIGHT(test); // available, h() = 4
     puzzle->displayState(test);
     std::cout << "-> move: Left\n";
     std::cout << "-> h(n) = " << puzzle->h(test) << "\n\n";
 
+    // puzzle->MOVE_UP(test); // unavailable, h() = 0
+    // puzzle->MOVE_LEFT(test); // explored, h() = 0
     puzzle->MOVE_DOWN(test); // available, h() = 5
+    // puzzle->MOVE_RIGHT(test); // unavailable, h() = 0
     puzzle->displayState(test);
     std::cout << "-> move: Left\n";
     std::cout << "-> h(n) = " << puzzle->h(test) << "\n\n";
 
+    // puzzle->MOVE_UP(test); // explored, h() = 0
+    // puzzle->MOVE_LEFT(test); // unavailable, h() = 0
+    // puzzle->MOVE_DOWN(test); // available, h() = 2
     puzzle->MOVE_RIGHT(test); // available, h() = 0
     puzzle->displayState(test);
     std::cout << "-> move: Left\n";
     std::cout << "-> h(n) = " << puzzle->h(test) << "\n\n";
     std::cout << "-> isGoal = " << puzzle->isGoal(test) << "\n\n";
 
+    // Solve(state, goal);
+
     std::cout << "\n";
-    // std::cout << "Press ENTER to continue...";
-    // std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+    std::cout << "Press ENTER to continue...";
+    std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
     return 0;
 }
