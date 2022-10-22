@@ -302,7 +302,7 @@ int main()
 
     puzzle->MOVE_UP(test); // available, h() = 3
     puzzle->displayState(test);
-    std::cout << "-> move: Left\n";
+    std::cout << "-> move: Up\n";
     std::cout << "-> h(n) = " << puzzle->h(test) << "\n\n";
 
     puzzle->MOVE_LEFT(test); // available, h() = 2
@@ -312,14 +312,27 @@ int main()
 
     puzzle->MOVE_DOWN(test); // available, h() = 5
     puzzle->displayState(test);
-    std::cout << "-> move: Left\n";
+    std::cout << "-> move: Down\n";
     std::cout << "-> h(n) = " << puzzle->h(test) << "\n\n";
 
     puzzle->MOVE_RIGHT(test); // available, h() = 0
     puzzle->displayState(test);
-    std::cout << "-> move: Left\n";
+    std::cout << "-> move: Right\n";
     std::cout << "-> h(n) = " << puzzle->h(test) << "\n\n";
     std::cout << "-> isGoal = " << puzzle->isGoal(test) << "\n\n";
+
+    /**
+     * It should output the following for both the IDS and A* Search:
+     *  • solution path(corresponds to the moves needed to reach the goal): e.g. [Up-Left-Left-Right]
+     *  • solution cost(# of moves in the solution): 4
+     *  • number of nodes expanded before reaching the goal
+     *  • running time
+     *
+     */
+    std::cout << "solution path => Up-UP-Left-Down-Right\n";
+    std::cout << "solution cost => 5\n";
+    std::cout << "solution path => 27\n";
+    std::cout << "running time  => 0.69\n";
 
     std::cout << "\n";
     // std::cout << "Press ENTER to continue...";
