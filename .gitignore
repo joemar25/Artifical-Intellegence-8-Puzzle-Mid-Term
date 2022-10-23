@@ -1,3 +1,6 @@
 notes.txt
 /.vscode
 *.exe
+*.class
+/test/java
+.java

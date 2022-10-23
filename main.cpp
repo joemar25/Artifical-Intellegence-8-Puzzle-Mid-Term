@@ -273,7 +273,7 @@ int Puzzle::h(int state[])
     return total;
 }
 
-int main()
+int main(int argc, char **argv)
 {
     printChoices();
 
