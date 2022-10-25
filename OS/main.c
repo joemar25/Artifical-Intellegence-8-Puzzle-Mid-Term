@@ -17,7 +17,8 @@
  */
 
 #include <stdio.h>
-#pragma pack(1) // We can avoid the wastage of memory by simply writing #pragma pack(1) : https://iq.opengenus.org/size-of-struct-in-c/
+#include <stdlib.h> // use malloc, free
+#pragma pack(1)     // We can avoid the wastage of memory by simply writing #pragma pack(1) : https://iq.opengenus.org/size-of-struct-in-c/
 
 /**
  * @note my_standard::Global Variables => will be used for iteration(s)
@@ -34,6 +35,8 @@
  *          | and later be used for computations
  */
 unsigned int i, j, current;
+unsigned int tt, wt, tbt, ct;
+float att, awt;
 
 typedef struct Process
 {
@@ -44,85 +47,122 @@ typedef struct Process
     int qt; // -> quantum
 } process;
 
-// typedef struct Queue
-// {
-//     process p;
-//     struct Queue *next;
-// } queue;
-
-void DisplayResult()
-{
-    /**
-     * expected output
-     *
-     * -------------------------------------
-     * CPU SCHED := FCFS
-     *
-     * ------------------------------------
-     * | Process | AT | BT | CT | TT | WT |
-     * ------------------------------------
-     * | 1       | 0  | 3  | 3  | 3  | 0  |
-     * | 2       | 1  | 2  | 5  | 4  | 2  |
-     * | 3       | 2  | 4  | 9  | 7  | 3  |
-     * ------------------------------------
-     *
-     * ATT = 12.2 ms
-     * AWT = 10.2 ms
-     *
-     * -------------------------------------
-     */
-    return;
-}
-
-void swap(process *px, process *py)
+void swap(process *a, process *b)
 {
     process temp;
-    temp = *px;
-    *px = *py;
-    *py = temp;
+    temp = *a;
+    *a = *b;
+    *b = temp;
 }
 
-void sort(process *list, int n)
+int compareAT(const void *a, const void *b)
 {
-    int i, j;
-    for (i = 0; i < n - 1; i++)
-    {
-        for (j = 0; j < n - i - 1; j++)
-        {
-            if ((list + j)->at > (list + j + 1)->at)
-                swap((list + j), (list + j + 1));
-        }
-    }
+    return ((process *)a)->at > ((process *)b)->at;
 }
 
+int compareBT(const void *a, const void *b)
+{
+    return ((process *)a)->bt > ((process *)b)->bt;
+}
+
+int getTBT(process *p, int size)
+{
+    // - return total burst time, function::checking the correct burst time per process
+    for (i = 0; i < size; i++)
+    {
+        for (j = 0; j < (p + i)->bt; j++)
+            tbt += 1;
+    }
+    return tbt;
+}
+
+/**
+ * @note
+ *  - We need to add (bt) per process and get its tunaround time and waiting time
+ *  - Get Average tunaround time and Average Waiting time
+ */
 void FCFS(process *queue, int size)
 {
-    /* we only need burst time and arrival time */
-    printf("CPU SCHEDULING = FCFS");
-    int total_bt = 0;
+    qsort(queue, size, sizeof(process), compareAT);
+
+    printf("\n\n=========================================\n\n");
+    printf("CPU SCHED := FCFS\n\n");
+    printf("-----------------------------------------\n");
+    printf("| Process | AT  | BT  | CT  | TT  | WT  |\n");
+    printf("-----------------------------------------\n");
 
     for (i = 0; i < size; i++)
     {
-        printf("Process ID = %d\n", (queue + i)->id);
-        for (j = 0; j < (queue + i)->bt; j++)
-        {
-            total_bt += 1;
-        }
+        ct += (queue + i)->bt;
+        tt = ct - (queue + i)->at;
+        wt = tt - (queue + i)->bt;
+        att += tt;
+        awt += wt;
+        // print cases
+        printf("| %d       |%3d  |%3d  |%3d  |%3d  |%3d  |\n", (queue + i)->id, (queue + i)->at, (queue + i)->bt, ct, tt, wt);
+    }
+    att /= size;
+    awt /= size;
+    printf("-----------------------------------------\n");
+
+    printf("ATT = %.1f ms\n", att);
+    printf("AWT = %.1f ms\n", awt);
+}
+
+void SJF(process *queue, int n)
+{
+    qsort(queue, n, sizeof(process), compareAT);
+    tt = 0, wt = 0, tbt = 0, ct = 0;
+    att = 0, awt = 0;
+
+    int ttime = 0;
+    for (i = 0; i < n; i++)
+    {
+        j = i;
+        while ((queue + j)->at <= ttime && j != n)
+            j++;
+        qsort((queue + j), n - j, sizeof(process), compareBT);
+        ttime += (queue + i)->at;
     }
 
-    printf("%d", total_bt);
+    printf("\n\n=========================================\n\n");
+    printf("CPU SCHED := FCFS\n\n");
+    printf("-----------------------------------------\n");
+    printf("| Process | AT  | BT  | CT  | TT  | WT  |\n");
+    printf("-----------------------------------------\n");
+
+    for (i = 0; i < n; i++)
+    {
+        ct += (queue + i)->bt;
+        tt = ct - (queue + i)->at;
+        wt = tt - (queue + i)->bt;
+        att += tt;
+        awt += wt;
+        // print cases
+        printf("| %d       |%3d  |%3d  |%3d  |%3d  |%3d  |\n", (queue + i)->id, (queue + i)->at, (queue + i)->bt, ct, tt, wt);
+    }
+    att /= n;
+    awt /= n;
+    printf("-----------------------------------------\n");
+
+    printf("ATT = %.1f ms\n", att);
+    printf("AWT = %.1f ms\n", awt);
 }
-void SJF()
-{
-    return;
-}
+
 void PRIO()
 {
     return;
 }
+
 void RR()
 {
     return;
+}
+
+void CPU_SCHED_ALGO(process *queue, int size)
+{
+    FCFS(queue, size);
+    SJF(queue, size);
 }
 
 int main()
@@ -145,36 +185,49 @@ int main()
         printf("enter process id  : ");
         scanf("%d", &(list + i)->id);
 
-        printf("enter burst time  : ");
-        scanf("%d", &(list + i)->bt);
-
         printf("enter arrival time : ");
         scanf("%d", &(list + i)->at);
 
-        printf("enter priority     : ");
-        scanf("%d", &(list + i)->pr);
+        printf("enter burst time  : ");
+        scanf("%d", &(list + i)->bt);
 
-        printf("enter quantum time : ");
-        scanf("%d", &(list + i)->qt);
+        // printf("enter priority     : ");
+        // scanf("%d", &(list + i)->pr);
+
+        // printf("enter quantum time : ");
+        // scanf("%d", &(list + i)->qt);
     }
 
-    printf("\nDisplaying Information:\n");
-    for (i = 0; i < size; ++i)
-    {
-        printf("Process ID = %d, \tProcess BT = %d\n", (list + i)->id, (list + i)->bt);
-    }
-
-    sort(list, size);
-
-    printf("\nDisplaying Sorted Information:\n");
-    for (i = 0; i < size; ++i)
-    {
-        printf("Process ID = %d, \tProcess BT = %d\n", (list + i)->id, (list + i)->bt);
-    }
-
-    FCFS(list, size);
+    // sort by arrival time
+    CPU_SCHED_ALGO(list, size);
 
     // free process
     free(list);
     return 0;
 }
+
+/*
+
+5
+0 0 2
+1 1 6
+2 2 4
+3 3 9
+4 6 12
+
+5
+2 2 2
+5 4 7
+3 1 4
+4 0 1
+1 3 5
+
+5
+1 0 5
+2 1 2
+3 2 4
+4 3 1
+5 4 7
+
+
+*/
