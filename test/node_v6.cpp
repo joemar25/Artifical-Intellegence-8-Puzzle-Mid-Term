@@ -1,5 +1,9 @@
 #include <iostream>
+#include <vector>
 #include <list>
+
+using std::cout;
+using std::list;
 
 #define __row_col_ 9
 
@@ -144,8 +148,8 @@ public:
     void displayState()
     {
         for (int i = 0; i < 9; i++)
-            std::cout << this->getStateIndex(i) << " ";
-        std::cout << "\n";
+            cout << this->getStateIndex(i) << " ";
+        cout << "\n";
     }
 
     ~Puzzle(){};
@@ -187,17 +191,112 @@ public:
         return this->depth;
     }
 
-    std::list<Puzzle *> open, closed;
+    std::vector<Puzzle *> open, closed;
     int f = 0;
     // test A*
-    void AStar()
+    // void AAStar()
+    // {
+    //     open.push_back(this->puzzle);
+    //     // open[0]->displayState();
+    //     f = open.front()->getManhattanDistance();
+
+    //     if (open.size() != 0)
+    //     {
+    //         int i = 0;
+
+    //         for (auto i = open.begin(); i != open.end(); ++i)
+    //         {
+    //             // if (*i.operator++ % 2 == 0)
+    //             // {
+    //             //     open.erase(i);
+    //             //     i--;
+    //             // }
+    //         }
+
+    //         while (!open.empty())
+    //         {
+    //             closed.push_back(open.at(i));
+    //             i++;
+    //             // open.erase();
+    //         }
+    //     }
+    //     else
+    //         cout << "error occured\n";
+
+    //     /**
+    //      * 1. Put the start node s on a list called OPEN and compute f(s).
+    //      * 2. If OPEN is empty, exit with failure; otherwise continue.
+    //      * 3. Remove from OPEN that node whose f value is smallest and put it on a list called
+    //      *    CLOSED. Call this node n. (Resolve ties for minimal f values arbitrarily, but always
+    //      *    in favor of any goal node.)
+    //      * 4. If n is a goal node, exit with the solution path obtained by tracing back the pointers;
+    //      *    otherwise continue.
+    //      * 5. Expand node n, generating all its successors. If there are no successors, go
+    //      *    immediately to 2. For each successsor ni, compute f(ni).
+    //      * 6. Associate with the successors not already on either OPEN or CLOSED the f values
+    //      *    just computed. Put these nodes on OPEN and direct pointers from them back to n.
+    //      * 7. Associate with those successors that were already on OPEN or CLOSED the smaller
+    //      *    of the f values just computed and their previous f values. Put on OPEN those
+    //      *    successors on CLOSED whose f values were thus lowered, and redirect to n the
+    //      *    pointers from all nodes whose f values were lowered.
+    //      * 8. Go to 2.
+    //      */
+    // }
+
+    void AStar(Puzzle *initialState)
     {
-        open.push_front(this->puzzle);
-        f = open.front()->getManhattanDistance();
-        for (std::list<Puzzle *>::iterator i = open.begin(); i != open.end(); i++)
+        std::List openList;
+        std::List closedList;
+        openList.insertToFront(initialState);
+        int counter = 0;
+        while (openList.lst != NULL)
         {
-            *(i)->getManhattanDistance();
-            // closed.push_back(i->getState());
+            // get the best state which has the lowest heuristic value f(x) + g(x)
+            eightPuzzle *bestState = openList.chooseBestState();
+            closedList.insertToFront(bestState); // moves to closed list
+
+            if (isGoal(bestState))
+            {
+                cout << "Solution Path: ";
+                int cost = printStates(bestState);
+                cout << endl;
+                cout << "No. of Nodes Expanded: " << counter << endl;
+                cout << "Solution Cost: " << cost - 1 << endl;
+                return;
+            }
+            counter++;
+            if (movable(bestState, "UP"))
+            {
+                eightPuzzle *tmp = move(bestState, "UP");
+                if (closedList.notInList(tmp))
+                {
+                    openList.insertToFront(tmp);
+                }
+            }
+            if (movable(bestState, "RIGHT"))
+            {
+                eightPuzzle *tmp = move(bestState, "RIGHT");
+                if (closedList.notInList(tmp))
+                {
+                    openList.insertToFront(tmp);
+                }
+            }
+            if (movable(bestState, "DOWN"))
+            {
+                eightPuzzle *tmp = move(bestState, "DOWN");
+                if (closedList.notInList(tmp))
+                {
+                    openList.insertToFront(tmp);
+                }
+            }
+            if (movable(bestState, "LEFT"))
+            {
+                eightPuzzle *tmp = move(bestState, "LEFT");
+                if (closedList.notInList(tmp))
+                {
+                    openList.insertToFront(tmp);
+                }
+            }
         }
     }
 
@@ -209,9 +308,9 @@ int main()
     int state[9] = {1, 2, 3, 4, 0, 5, 6, 7, 8};
     Puzzle puzzle(state);
     Node *node = new Node(&puzzle);
-
+    node->AStar();
     // puzzle.displayState();
     // solution_path(initial);
-    std::cout << "\n";
+    cout << "\n";
     return 0;
 }

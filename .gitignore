@@ -3,4 +3,5 @@ notes.txt
 *.exe
 *.class
 /test/java
+/test/8-Puzzle-Solver-master
 .java

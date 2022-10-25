@@ -1,9 +1,9 @@
 #include "Student.h"
 
-Student::Student(string &_name, char &_grade)
+Student::Student(string _name, char _grade)
 {
-    this->setName(_name);
-    this->setGrade(_grade);
+    this->name = _name;
+    this->grade = _grade;
 }
 
 string Student::getName() const

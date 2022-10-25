@@ -15,7 +15,7 @@ public:
     //  default constructor
     Student() {}
     //  overload constructor
-    Student(string &, char &);
+    Student(string, char);
     //  deconstructor
     ~Student() {}
 
