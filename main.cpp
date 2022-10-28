@@ -51,24 +51,67 @@ public:
 class PUZZLE
 {
 public:
-    unsigned int board[ROW_COL][ROW_COL] = {0};
-    unsigned int depth;
-    unsigned int heuristic;
-    char move;
-    string move_indicator;
-    BLANK blank_tile;
-    PUZZLE *parent;
+    unsigned int board[ROW_COL][ROW_COL] = {0}; // puzzle object must have a board
+    unsigned int depth;                         // depth attribute that will be used in IDS
+    unsigned int heuristic;                     // heuristic value of the current puzzle
+    char move;                                  // indicate move (U, D, L, R)
+    string move_indicator;                      // board move (UP, DOWN, LEFT, RIGHT)
+    BLANK blank_tile;                           // a puzzle must have a coordinate(s) of where the blank tile is
+    PUZZLE *parent;                             // for backtracking the parent node of this current puzzle
 
-    // constructors
+    /**
+     * @note this is a Contructor that used to Construct a new PUZZLE object
+     *       - we also provided a deconstructor...
+     *         Destructor - is an instance member function which is invoked
+     *         automatically whenever an object is going to be destroyed.
+     *         Meaning, a destructor is the last function that is going to
+     *         be called before an object is destroyed.
+     */
     PUZZLE(){};
     ~PUZZLE(){};
 
-    // PUZZLE functions
-    bool isGoal();
-    void printBoard();
+    // PUZZLE functions, when a puzzle object is created, it can use this functionalities (implemented in public)
+    bool isGoal()
+    {
+        for (x = 0; x < row; x++)
+        {
+            for (y = 0; y < col; y++)
+            {
+                if (board[x][y] != goalState[x][y])
+                    return false;
+            }
+        }
+        return true;
+    }
+
+    void printBoard()
+    {
+        for (x = 0; x < row; x++)
+        {
+            cout << blankspace;
+            for (y = 0; y < col; y++)
+                cout
+                    << "+---";
+            cout << "+\n";
+
+            cout << blankspace;
+            for (y = 0; y < col; y++)
+            {
+                string result = (this->board[x][y] == 0) ? " " : std::to_string(this->board[x][y]);
+                cout << "| " << result << " ";
+            }
+            cout << "|\n";
+        }
+
+        cout << blankspace;
+        for (y = 0; y < col; y++)
+            cout << "+---";
+        cout << "+\n";
+        cout << blankspace << "   " << this->move_indicator << "\n";
+    }
 };
 
-/*** LIST ***/
+/*** @note This contains the list of State of Puzzle ***/
 class STATE
 {
 public:
@@ -80,7 +123,7 @@ public:
 };
 
 /*** FUNCTIONS to get Heuristic ***/
-int distBetween2Tiles(PUZZLE *state, BLANK correctTile)
+int tileDistance(PUZZLE *state, BLANK correctTile)
 {
     for (int row = 0; row < ROW_COL; row++)
     {
@@ -98,7 +141,7 @@ int distBetween2Tiles(PUZZLE *state, BLANK correctTile)
     return 0;
 }
 
-int getManhattanDistance(PUZZLE *state)
+int getHeuristic(PUZZLE *state)
 {
     if (state->heuristic != -1)
         return state->heuristic;
@@ -115,7 +158,7 @@ int getManhattanDistance(PUZZLE *state)
             else
             {
                 correctTile.set(i, j);
-                dist += distBetween2Tiles(state, correctTile);
+                dist += tileDistance(state, correctTile);
             }
         }
     }
@@ -126,17 +169,20 @@ int getManhattanDistance(PUZZLE *state)
 /**
  * @note this function is used for checking the state is already in the visited list
  *
- * @param state1
- * @param state2
+ * @param a
+ * @param b
+ *
+ *  compare each state and return if they were equally match or not
+ *
  * @return true/false
  */
-bool isEqual(PUZZLE *state1, PUZZLE *state2)
+bool isEqual(PUZZLE *a, PUZZLE *b)
 {
-    for (int i = 0; i < 3; i++)
+    for (x = 0; x < row; x++)
     {
-        for (int j = 0; j < 3; j++)
+        for (y = 0; y < col; y++)
         {
-            if (state1->board[i][j] != state2->board[i][j])
+            if (a->board[x][y] != b->board[x][y])
                 return false;
         }
     }
@@ -149,8 +195,7 @@ public:
     NODE(){};
     ~NODE(){};
 
-    // initializing an empty list of states
-    STATE *node = nullptr;
+    STATE *node = nullptr; // an attribute for initializing an empty list of states
 
     PUZZLE *front()
     {
@@ -165,6 +210,9 @@ public:
         return tmp;
     }
 
+    /**
+     * @brief - this returns the end of the node
+     */
     PUZZLE *end()
     {
         if (node->next == nullptr)
@@ -185,49 +233,59 @@ public:
         return tmp;
     }
 
-    PUZZLE *chooseBestState()
+    /**
+     * @brief - use to get the best state
+     */
+    PUZZLE *bestState()
     {
-        STATE *tmplist = node;
-        STATE *previous;
-        STATE *lowestHeuristic;
-        PUZZLE *bestState = nullptr;
         int min;
+        STATE *tmplist = node;
+        STATE *previous = nullptr;
+        STATE *lowheur = nullptr;
+        PUZZLE *beststate = nullptr;
 
         if (node->next == nullptr)
         {
-            bestState = node->state;
+            beststate = node->state;
             delete node;
             node = nullptr;
-            return bestState;
+            return beststate;
         }
-        min = getManhattanDistance(tmplist->state);
-        lowestHeuristic = tmplist;
+
+        min = getHeuristic(tmplist->state);
+        lowheur = tmplist;
+
         while (tmplist->next != nullptr)
         {
-            int dist = getManhattanDistance(tmplist->next->state);
+            int dist = getHeuristic(tmplist->next->state);
             if (dist < min)
             {
                 previous = tmplist;
-                lowestHeuristic = tmplist->next;
+                lowheur = tmplist->next;
                 min = dist;
             }
             tmplist = tmplist->next;
         }
 
-        bestState = lowestHeuristic->state;
+        beststate = lowheur->state;
+
         if (node != nullptr)
         {
-            if (lowestHeuristic == node)
+            if (lowheur == node)
                 return front();
-            else if (lowestHeuristic->next == nullptr)
+            if (lowheur->next == nullptr)
                 previous->next = nullptr;
             else
-                previous->next = lowestHeuristic->next;
+                previous->next = lowheur->next;
         }
-        delete lowestHeuristic;
-        return bestState;
+
+        delete lowheur;
+        return beststate;
     }
 
+    /**
+     * @brief - this is a getter function that will use the Puzzle to insert on the Front of the List
+     */
     void insertToFront(PUZZLE *s)
     {
         STATE *tmp = new (STATE);
@@ -238,6 +296,9 @@ public:
         node = tmp;
     }
 
+    /**
+     * @brief - this is a getter function that will use the Puzzle to insert on the End of the List
+     */
     void insertToEnd(PUZZLE *s)
     {
         if (node == nullptr)
@@ -273,46 +334,6 @@ public:
     }
 };
 
-/*** PUZZLE actual function(s) ***/
-bool PUZZLE::isGoal()
-{
-    for (x = 0; x < row; x++)
-    {
-        for (y = 0; y < col; y++)
-        {
-            if (board[x][y] != goalState[x][y])
-                return false;
-        }
-    }
-    return true;
-}
-
-void PUZZLE::printBoard()
-{
-    for (x = 0; x < row; x++)
-    {
-        cout << blankspace;
-        for (y = 0; y < col; y++)
-            cout
-                << "+---";
-        cout << "+\n";
-
-        cout << blankspace;
-        for (y = 0; y < col; y++)
-        {
-            string result = (this->board[x][y] == 0) ? " " : std::to_string(this->board[x][y]);
-            cout << "| " << result << " ";
-        }
-        cout << "|\n";
-    }
-
-    cout << blankspace;
-    for (y = 0; y < col; y++)
-        cout << "+---";
-    cout << "+\n";
-    cout << blankspace << "   " << this->move_indicator << "\n";
-}
-
 /*** USERS BASE TERMINAL GUI AND INPUT DESIGN ***/
 void printChoices()
 {
@@ -334,11 +355,23 @@ void printChoices()
          << "\t* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *\n";
 }
 
+/**
+ * @note - validate number if valid on our option list
+ *
+ * @param num
+ * @return true
+ * @return false
+ */
 bool isOptionValid(const int &num)
 {
     return num <= 0 || num >= 6;
 }
 
+/**
+ * @brief loop until reaching the correct input
+ *
+ * @param input
+ */
 void selectOption(unsigned int &input)
 {
     printChoices();
@@ -365,7 +398,7 @@ void selectOption(unsigned int &input)
  * @param state
  * @return PUZZLE*
  */
-PUZZLE *newState(unsigned int state[][ROW_COL])
+PUZZLE *createNewState(unsigned int state[][ROW_COL])
 {
     PUZZLE *tmp = new (PUZZLE);
     for (x = 0; x < row; x++)
@@ -390,12 +423,12 @@ PUZZLE *newState(unsigned int state[][ROW_COL])
  *        - set move
  *        - and set parent of the state
  *
- * @param arr := array from the main function (easy, medium, hard, worst, preferred)
+ * @param board := array from the main function that gets -> (easy, medium, hard, worst, preferred)
  * @return created state
  */
-PUZZLE *newInitialState(unsigned int arr[][ROW_COL])
+PUZZLE *initialState(unsigned int board[][ROW_COL])
 {
-    PUZZLE *state = newState(arr);
+    PUZZLE *state = createNewState(board);
     state->depth = 0;
     state->move = 'S';
     state->move_indicator = "Initial";
@@ -405,7 +438,7 @@ PUZZLE *newInitialState(unsigned int arr[][ROW_COL])
 
 PUZZLE *move(PUZZLE *state, char direction)
 {
-    PUZZLE *tmp = newState(state->board);
+    PUZZLE *tmp = createNewState(state->board);
     tmp->parent = state;
     tmp->depth = state->depth + 1;
 
@@ -447,6 +480,13 @@ PUZZLE *move(PUZZLE *state, char direction)
     return tmp;
 }
 
+/**
+ * @brief check if move is possible
+ *
+ * @param state
+ * @param direction
+ * @return true/false
+ */
 bool movable(PUZZLE *state, char direction)
 {
     if (direction == 'U')
@@ -508,7 +548,7 @@ void heuristicSearch(PUZZLE *state)
 
     while (openList.node != nullptr)
     {
-        PUZZLE *bestState = openList.chooseBestState();
+        PUZZLE *bestState = openList.bestState();
         closedList.insertToFront(bestState);
 
         if (bestState->isGoal())
@@ -635,6 +675,7 @@ int main(int argc, char **argv)
 
     do
     {
+        // select options and select board to initialize
         selectOption(user_input);
 
         if (user_input == 5)
@@ -647,22 +688,22 @@ int main(int argc, char **argv)
                 for (y = 0; y < col; y++)
                     cin >> input[x][y];
             }
-            init = newInitialState(input);
+            init = initialState(input);
         }
 
         if (user_input == 1)
-            init = newInitialState(easy);
+            init = initialState(easy);
         if (user_input == 2)
-            init = newInitialState(medium);
+            init = initialState(medium);
         if (user_input == 3)
-            init = newInitialState(hard);
+            init = initialState(hard);
         if (user_input == 4)
-            init = newInitialState(worst);
+            init = initialState(worst);
 
         init->printBoard();
 
         // A*
-        cout << "\n\t Agent is using A*\n\t Agent is now searching for solution path...\n";
+        cout << "\n\t Agent is using A*\n\t Agent is now searching for solution ...\n";
         start = clock();
         heuristicSearch(init);
         end = clock();
@@ -672,7 +713,7 @@ int main(int argc, char **argv)
         cout << "\n\t=================================================================================\n";
 
         // IDS
-        cout << "\n\t Agent is using IDS\n\t Agent is now searching for solution path...";
+        cout << "\n\t Agent is using IDS\n\t Agent is now searching for solution ...";
         start = clock();
         blindSearch(init);
         end = clock();
@@ -681,6 +722,7 @@ int main(int argc, char **argv)
 
         cout << "\n\n\t press and enter (0 to continue and 1 to end program): ";
         scanf("%d", &end);
+
     } while (!(end >= 1 && end <= 1));
 
     delete init;
