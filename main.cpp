@@ -358,7 +358,7 @@ void selectOption(unsigned int &input)
     }
 }
 
-/*** USEFULL actutal function(s) ***/
+/*** USEFULL actual function(s) ***/
 /**
  * @note - this function will set a state and set the blank tile for that state
  *       - set heuristic to (-1) to determine if it is not yet calculated
