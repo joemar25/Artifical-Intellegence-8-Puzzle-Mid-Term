@@ -316,8 +316,7 @@ void PUZZLE::printBoard()
 /*** USERS BASE TERMINAL GUI AND INPUT DESIGN ***/
 void printChoices()
 {
-    cout << "\033[2J\033[1;1H"
-         << "\t* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *\n"
+    cout << "\n\t* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *\n"
          << "\t*                                                                                                           *\n"
          << "\t*                                         _P u z z l e   C h o i c e s_                                     *\n"
          << "\t*                                                                                                           *\n"
@@ -666,7 +665,6 @@ int main(int argc, char **argv)
             init = newInitialState(worst);
 
         init->printBoard();
-        cout << "\033[2J\033[1;1H";
 
         // A*
         cout << "\n\t Agent is using A*\n\t Agent is now searching for solution path...\n";
@@ -690,7 +688,6 @@ int main(int argc, char **argv)
         scanf("%d", &end);
     } while (!(end >= 1 && end <= 1));
 
-    cout << "\033[2J\033[1;1H";
     delete init;
     init = nullptr;
     return 0;
