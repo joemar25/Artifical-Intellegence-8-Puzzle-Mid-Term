@@ -4,7 +4,7 @@
 using std::cin;
 using std::cout;
 
-#define _ROWCOL_ 3
+#define ROW_COL 3
 
 // this class is used for creating objects that keeps the position of the blank tile for each state
 class BlankTile
@@ -25,11 +25,11 @@ public:
 class Puzzle
 {
 public:
-    int board[_ROWCOL_][_ROWCOL_]; // tile arrangements
-    BlankTile blankTile;           // position (index) of the blank tile. BlankTile class is implemented above
-    int level, manhattanDistance;  // (depth of a node (level) which is used in IDS algorithm, used in heuristicSearch)
-    char move;                     // holds the previous tile movement which resulted into current state
-    Puzzle *parent;                // pointer to parent node - used to backtrack previous states
+    int board[ROW_COL][ROW_COL];  // tile arrangements
+    BlankTile blankTile;          // position (index) of the blank tile. BlankTile class is implemented above
+    int level, manhattanDistance; // (depth of a node (level) which is used in IDS algorithm, used in heuristicSearch)
+    char move;                    // holds the previous tile movement which resulted into current state
+    Puzzle *parent;               // pointer to parent node - used to backtrack previous states
 
     Puzzle(){};
     ~Puzzle(){};
@@ -46,10 +46,10 @@ public:
 };
 
 // global variables
-int goalState[][_ROWCOL_] = {{1, 2, 3}, {8, 0, 4}, {7, 6, 5}};
+int goalState[][ROW_COL] = {{1, 2, 3}, {8, 0, 4}, {7, 6, 5}};
 // function declarations - all of these are implemented at the bottom
-Puzzle *newState(int state[][_ROWCOL_]);
-Puzzle *newInitialState(int arr[][_ROWCOL_]);
+Puzzle *newState(int state[][ROW_COL]);
+Puzzle *newInitialState(int arr[][ROW_COL]);
 Puzzle *move(Puzzle *state, char direction);
 bool movable(Puzzle *state, char direction);
 bool isEqual(Puzzle *state1, Puzzle *state2);
@@ -223,12 +223,12 @@ int main()
 {
     int choice = 0;
 
-    int easy[][_ROWCOL_] = {{1, 3, 4}, {8, 6, 2}, {7, 0, 5}};
-    int medium[][_ROWCOL_] = {{2, 8, 1}, {0, 4, 3}, {7, 6, 5}};
-    int hard[][_ROWCOL_] = {{2, 8, 1}, {4, 6, 3}, {7, 5, 0}};
-    int worst[][_ROWCOL_] = {{5, 6, 7}, {4, 0, 8}, {3, 2, 1}};
-    int preferred[][_ROWCOL_] = {{2, 0, 1}, {4, 8, 3}, {7, 6, 5}};
-    int input[_ROWCOL_][_ROWCOL_] = {0};
+    int easy[][ROW_COL] = {{1, 3, 4}, {8, 6, 2}, {7, 0, 5}};
+    int medium[][ROW_COL] = {{2, 8, 1}, {0, 4, 3}, {7, 6, 5}};
+    int hard[][ROW_COL] = {{2, 8, 1}, {4, 6, 3}, {7, 5, 0}};
+    int worst[][ROW_COL] = {{5, 6, 7}, {4, 0, 8}, {3, 2, 1}};
+    int preferred[][ROW_COL] = {{2, 0, 1}, {4, 8, 3}, {7, 6, 5}};
+    int input[ROW_COL][ROW_COL] = {0};
 
     cout << "Choose initial configuration:\n";
     cout << "[1] Easy\n[2] Medium\n[3] Hard\n[4] Worst\n[5] Keyboard input\n";
@@ -252,10 +252,10 @@ int main()
     case 5:
         cout << "*******Initial Board Configuration Input*******\n";
         cout << "Please Input the tile arrangement for each row separated with spaces\n";
-        for (int i = 0; i < _ROWCOL_; i++)
+        for (int i = 0; i < ROW_COL; i++)
         {
             cout << "ROW" << i + 1 << "\n";
-            for (int j = 0; j < _ROWCOL_; j++)
+            for (int j = 0; j < ROW_COL; j++)
             {
                 cin >> input[i][j];
             }
@@ -392,11 +392,9 @@ void blindSearch(Puzzle *initialState)
 
             if (isGoal(first))
             {
+                cout << "\nstatus: solution found";
                 cout << "\n"
-                     << "status: solution found";
-                cout << "\n"
-                     << "\n"
-                     << "Solution Path: ";
+                     << "\nSolution Path: ";
                 int cost = printStates(first);
                 cout << "\nNodes expanded: " << counter;
                 cout << "\nSolution Cost: " << cost - 1 << "\n";
@@ -444,12 +442,12 @@ void blindSearch(Puzzle *initialState)
 
 // function implementations
 // creating a new state that acceps array which contains tile arrangment
-Puzzle *newState(int state[][_ROWCOL_])
+Puzzle *newState(int state[][ROW_COL])
 {
     Puzzle *tmp = new (Puzzle);
-    for (int i = 0; i < _ROWCOL_; i++)
+    for (int i = 0; i < ROW_COL; i++)
     {
-        for (int j = 0; j < _ROWCOL_; j++)
+        for (int j = 0; j < ROW_COL; j++)
         {
             // finds the blank tile
             if (state[i][j] == 0)
@@ -461,7 +459,7 @@ Puzzle *newState(int state[][_ROWCOL_])
     return tmp;
 }
 // creating a initial state
-Puzzle *newInitialState(int arr[][_ROWCOL_])
+Puzzle *newInitialState(int arr[][ROW_COL])
 {
     Puzzle *state = newState(arr); // creating a new state that acceps array which contains tile arrangment
     state->level = 0;              // initial state has g(x) = 0
@@ -473,9 +471,9 @@ Puzzle *newInitialState(int arr[][_ROWCOL_])
 // used in checking if the state is already in the visited list - notInList()    function
 bool isEqual(Puzzle *state1, Puzzle *state2)
 {
-    for (int i = 0; i < _ROWCOL_; i++)
+    for (int i = 0; i < ROW_COL; i++)
     {
-        for (int j = 0; j < _ROWCOL_; j++)
+        for (int j = 0; j < ROW_COL; j++)
         {
             if (state1->board[i][j] != state2->board[i][j])
                 return false;
@@ -486,9 +484,9 @@ bool isEqual(Puzzle *state1, Puzzle *state2)
 // checks if the goal is found by comparing each tiles
 bool isGoal(Puzzle *state1)
 {
-    for (int i = 0; i < _ROWCOL_; i++)
+    for (int i = 0; i < ROW_COL; i++)
     {
-        for (int j = 0; j < _ROWCOL_; j++)
+        for (int j = 0; j < ROW_COL; j++)
         {
             if (state1->board[i][j] != goalState[i][j])
                 return false;
@@ -498,9 +496,9 @@ bool isGoal(Puzzle *state1)
 }
 void printState(Puzzle *state)
 {
-    for (int i = 0; i < _ROWCOL_; i++)
+    for (int i = 0; i < ROW_COL; i++)
     {
-        for (int j = 0; j < _ROWCOL_; j++)
+        for (int j = 0; j < ROW_COL; j++)
             cout << state->board[i][j] << " | ";
         cout << "\n";
     }
@@ -568,12 +566,12 @@ bool movable(Puzzle *state, char direction)
     }
     else if (direction == 'R')
     {
-        if (state->blankTile.y < _ROWCOL_ - 1)
+        if (state->blankTile.y < ROW_COL - 1)
             return true;
     }
     else if (direction == 'D')
     {
-        if (state->blankTile.x < _ROWCOL_ - 1)
+        if (state->blankTile.x < ROW_COL - 1)
             return true;
     }
     else if (direction == 'L')
@@ -595,9 +593,9 @@ int abs(int x)
 // used in getManhattanDistance function
 int distBetween2Tiles(Puzzle *state, BlankTile correctTile)
 {
-    for (int row = 0; row < _ROWCOL_; row++)
+    for (int row = 0; row < ROW_COL; row++)
     {
-        for (int col = 0; col < _ROWCOL_; col++)
+        for (int col = 0; col < ROW_COL; col++)
         {
             int i = correctTile.x, j = correctTile.y;
 
@@ -620,10 +618,10 @@ int getManhattanDistance(Puzzle *state)
     int dist = 0;          // variable that will keep the total manhattan distance
     BlankTile correctTile; // holds the index (i,j) of a tile in the given state
 
-    for (int i = 0; i < _ROWCOL_; i++)
+    for (int i = 0; i < ROW_COL; i++)
     {
         // loop through all the tiles of the given state
-        for (int j = 0; j < _ROWCOL_; j++)
+        for (int j = 0; j < ROW_COL; j++)
         {
             if (state->board[i][j] == goalState[i][j]) // skip if the tile is in the correct place
                 continue;
