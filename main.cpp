@@ -289,7 +289,6 @@ bool PUZZLE::isGoal()
 
 void PUZZLE::printBoard()
 {
-    // cout << "                                                        PUZZLE Configuration\n";
     for (x = 0; x < row; x++)
     {
         cout << blankspace;
