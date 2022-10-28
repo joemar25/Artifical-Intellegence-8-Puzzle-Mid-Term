@@ -65,7 +65,6 @@ public:
 
     // PUZZLE functions
     bool isGoal();
-
     void printBoard();
 };
 
@@ -101,36 +100,36 @@ int distBetween2Tiles(PUZZLE *state, BLANK correctTile)
 
 int getManhattanDistance(PUZZLE *state)
 {
-    // if already calculated previously, just return that value
     if (state->heuristic != -1)
         return state->heuristic;
 
-    int dist = 0;      // variable that will keep the total manhattan distance
-    BLANK correctTile; // holds the index (i,j) of a tile in the given state
+    int dist = 0;
+    BLANK correctTile;
 
     for (int i = 0; i < ROW_COL; i++)
     {
-        // loop through all the tiles of the given state
         for (int j = 0; j < ROW_COL; j++)
         {
-            if (state->board[i][j] == goalState[i][j]) // skip if the tile is in the correct place
+            if (state->board[i][j] == goalState[i][j])
                 continue;
             else
             {
-                // else calculate the distance between 2 tiles (goalState's tile & misplaced tile)
                 correctTile.set(i, j);
-                dist += distBetween2Tiles(state, correctTile); // implemented as function to make use of return keyword to terminate nested loops completely when the distance is already calculated
+                dist += distBetween2Tiles(state, correctTile);
             }
         }
     }
-    // memorizing (recording) the value so next time getting the heuristic value for this state, just return the value recorded
-    // this will skip bunch of loops next time
-    // useful for getting the state with the lowest heuristic value in A* search algorithm
     state->heuristic = dist + state->depth;
     return dist + state->depth;
 }
 
-// used in checking if the state is already in the visited list - notInList()    function
+/**
+ * @note this function is used for checking the state is already in the visited list
+ *
+ * @param state1
+ * @param state2
+ * @return true/false
+ */
 bool isEqual(PUZZLE *state1, PUZZLE *state2)
 {
     for (int i = 0; i < 3; i++)
@@ -188,24 +187,21 @@ public:
 
     PUZZLE *chooseBestState()
     {
-        // chooses the state on the entire list with the lowest heuristic value
         STATE *tmplist = node;
         STATE *previous;
-        STATE *lowestHeuristic; // holds the state with the lowest heuristic value
+        STATE *lowestHeuristic;
         PUZZLE *bestState = nullptr;
         int min;
 
         if (node->next == nullptr)
         {
-            // CASE 1: has only 1 node in the list, just return that. that's already the bestState since there's no other state to compare with in the first place
             bestState = node->state;
             delete node;
             node = nullptr;
             return bestState;
         }
-        // finding the state with lowest hueristic value by looping through the entire list
-        min = getManhattanDistance(tmplist->state); // gets the heuristic value of the first state and sets that value as the minimum
-        lowestHeuristic = tmplist;                  // initially, the best state is set to the first state in the list
+        min = getManhattanDistance(tmplist->state);
+        lowestHeuristic = tmplist;
         while (tmplist->next != nullptr)
         {
             int dist = getManhattanDistance(tmplist->next->state);
@@ -215,21 +211,18 @@ public:
                 lowestHeuristic = tmplist->next;
                 min = dist;
             }
-            tmplist = tmplist->next; // iterate
+            tmplist = tmplist->next;
         }
 
         bestState = lowestHeuristic->state;
         if (node != nullptr)
         {
-            // CASE 1: bestState is found at the start of the list
             if (lowestHeuristic == node)
                 return front();
-            // CASE 2: bestState is at the last
             else if (lowestHeuristic->next == nullptr)
-                previous->next = nullptr; // link the previous state to nullptr means removing the last state out of the list
-            // CASE 3: bestState is found in the middle so unlink the middle and reconnect the list
+                previous->next = nullptr;
             else
-                previous->next = lowestHeuristic->next; // link the previous node and the node next to bestState.
+                previous->next = lowestHeuristic->next;
         }
         delete lowestHeuristic;
         return bestState;
@@ -261,8 +254,12 @@ public:
         temp->next = tmp;
     }
 
-    // this returns false or true if the given state is already in the list or not
-    // this helps preventing insertion of the same node twice into the list
+    /**
+     * @brief - this returns false or true if the given state is already in the list or not
+     *
+     * @param state
+     * @return true/false - this helps preventing insertion of the same node twice into the list
+     */
     bool notInList(PUZZLE *state)
     {
         STATE *tmplist = node;
@@ -408,7 +405,6 @@ PUZZLE *newInitialState(unsigned int arr[][ROW_COL])
     return state;
 }
 
-// moves the blank tile in a certain direction
 PUZZLE *move(PUZZLE *state, char direction)
 {
     PUZZLE *tmp = newState(state->board);
@@ -453,7 +449,6 @@ PUZZLE *move(PUZZLE *state, char direction)
     return tmp;
 }
 
-// checks if it is a valid move for the blank tile
 bool movable(PUZZLE *state, char direction)
 {
     if (direction == 'U')
