@@ -336,7 +336,7 @@ void printChoices()
 
 bool isOptionValid(const int &num)
 {
-    return num <= 0 || num >= 5;
+    return num <= 0 || num >= 6;
 }
 
 void selectOption(unsigned int &input)
@@ -637,20 +637,15 @@ int main(int argc, char **argv)
     {
         selectOption(user_input);
 
-        cout << user_input;
-
         if (user_input == 5)
         {
             cout << "\n\t Board Configuration Input";
-            cout << "\n\t Please Input the tile arrangement for each row separated with spaces\n";
+            cout << "\n\t Separated with spaces, upon filling each tile...\n";
             for (x = 0; x < row; x++)
             {
-                cout << "Row: " << x + 1 << "\n";
+                cout << "\n\t Row: " << x + 1 << "\n\t ";
                 for (y = 0; y < col; y++)
                     cin >> input[x][y];
-
-                for (y = 0; y < col; y++)
-                    cout << input[x][y];
             }
             init = newInitialState(input);
         }
