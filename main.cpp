@@ -13,9 +13,7 @@
 #include <iostream>
 #include <ctime>
 
-using std::cin;
-using std::cout;
-using std::string;
+using namespace std;
 
 // global final variable
 #define ROW_COL 3
@@ -97,7 +95,7 @@ public:
             cout << blankspace;
             for (y = 0; y < col; y++)
             {
-                string result = (this->board[x][y] == 0) ? " " : std::to_string(this->board[x][y]);
+                string result = (this->board[x][y] == 0) ? " " : to_string(this->board[x][y]);
                 cout << "| " << result << " ";
             }
             cout << "|\n";
@@ -405,7 +403,6 @@ PUZZLE *createNewState(unsigned int state[][ROW_COL])
     {
         for (y = 0; y < col; y++)
         {
-            // finds the blank tile
             if (state[x][y] == 0)
                 tmp->blank_tile.set(x, y);
             tmp->board[x][y] = state[x][y];
@@ -660,13 +657,17 @@ void blindSearch(PUZZLE *initialState)
         i++;
     }
 }
+
 int main(int argc, char **argv)
 {
     unsigned int user_input = 0, end = 0;
     PUZZLE *init = nullptr;
 
     // PUZZLE default config
-    unsigned int easy[][ROW_COL] = {{1, 3, 4}, {8, 6, 2}, {7, 0, 5}};
+    unsigned int easy[][ROW_COL] = {
+        {1, 3, 4},
+        {8, 6, 2},
+        {7, 0, 5}};
     unsigned int medium[][ROW_COL] = {{2, 8, 1}, {0, 4, 3}, {7, 6, 5}};
     unsigned int hard[][ROW_COL] = {{2, 8, 1}, {4, 6, 3}, {7, 5, 0}};
     unsigned int worst[][ROW_COL] = {{5, 6, 7}, {4, 0, 8}, {3, 2, 1}};
