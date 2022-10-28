@@ -27,7 +27,7 @@ double cpuTimeUsed;
 clock_t start, end;
 
 // versatile global variable(s)
-unsigned int counter, x, y;
+unsigned int counter, x, y, i, cost;
 const unsigned int goalState[][ROW_COL] = {{1, 2, 3}, {8, 0, 4}, {7, 6, 5}};
 
 /*** OBJECT tile, to keep track of a tile in PUZZLE ***/
@@ -129,13 +129,13 @@ public:
 /*** FUNCTIONS to get Heuristic ***/
 int tileDistance(PUZZLE *state, BLANK correctTile)
 {
-    for (int row = 0; row < ROW_COL; row++)
+    for (int r = 0; r < row; r++)
     {
-        for (int col = 0; col < ROW_COL; col++)
+        for (int c = 0; c < col; c++)
         {
-            int i = correctTile.X, j = correctTile.Y;
-            if (state->board[row][col] == goalState[i][j])
-                return abs(i - row) + abs(j - col);
+            int _x = correctTile.X, _y = correctTile.Y;
+            if (state->board[r][c] == goalState[_x][_y])
+                return abs(_x - r) + abs(_y - c);
         }
     }
     return 0;
@@ -149,15 +149,13 @@ int getHeuristic(PUZZLE *state)
     int dist = 0;
     BLANK correctTile;
 
-    for (int i = 0; i < ROW_COL; i++)
+    for (x = 0; x < ROW_COL; x++)
     {
-        for (int j = 0; j < ROW_COL; j++)
+        for (y = 0; y < ROW_COL; y++)
         {
-            if (state->board[i][j] == goalState[i][j])
-                continue;
-            else
+            if (state->board[x][y] != goalState[x][y])
             {
-                correctTile.set(i, j);
+                correctTile.set(x, y);
                 dist += tileDistance(state, correctTile);
             }
         }
@@ -516,7 +514,6 @@ int printStates(PUZZLE *state)
     if (state == nullptr)
         return 0;
 
-    int i;
     i = printStates(state->parent) + 1;
     if (state->move == 'S')
         return i;
@@ -529,7 +526,6 @@ int printMoves(PUZZLE *state)
     if (state == nullptr)
         return 0;
 
-    int i;
     if (state->move == 'S')
         return i;
     i = printMoves(state->parent) + 1;
@@ -541,8 +537,9 @@ int printMoves(PUZZLE *state)
 void heuristicSearch(PUZZLE *state)
 {
     counter = 0;
-    NODE openList;
-    NODE closedList;
+    NODE openList, closedList;
+    PUZZLE *tmp;
+
     openList.insertToFront(state);
 
     while (openList.node != nullptr)
@@ -555,54 +552,53 @@ void heuristicSearch(PUZZLE *state)
             printMoves(bestState);
             cout << "\n\t Agent found the solution!";
             cout << "\n\t Agent says.. this is the solution Path: ";
-            int cost = printStates(bestState);
+            cost = printStates(bestState);
             cout << "\n\n\t Expanded Nodes = " << counter;
             cout << "\n\t Solution Cost  = " << cost - 1;
             return;
         }
-        counter++;
+
         if (movable(bestState, 'U'))
         {
-            PUZZLE *tmp = move(bestState, 'U');
+            tmp = move(bestState, 'U');
             if (closedList.notInList(tmp))
-            {
                 openList.insertToFront(tmp);
-            }
         }
+
         if (movable(bestState, 'R'))
         {
-            PUZZLE *tmp = move(bestState, 'R');
+            tmp = move(bestState, 'R');
             if (closedList.notInList(tmp))
-            {
                 openList.insertToFront(tmp);
-            }
         }
+
         if (movable(bestState, 'D'))
         {
-            PUZZLE *tmp = move(bestState, 'D');
+            tmp = move(bestState, 'D');
             if (closedList.notInList(tmp))
-            {
                 openList.insertToFront(tmp);
-            }
         }
+
         if (movable(bestState, 'L'))
         {
-            PUZZLE *tmp = move(bestState, 'L');
+            tmp = move(bestState, 'L');
             if (closedList.notInList(tmp))
-            {
                 openList.insertToFront(tmp);
-            }
         }
+
+        counter++;
     }
 }
 
 void blindSearch(PUZZLE *initialState)
 {
-    int i = 0, counter = 0;
+    i = 0, counter = 0;
 
     while (true)
     {
         NODE closed, stack;
+        PUZZLE *tmp;
+
         stack.insertToFront(initialState);
         while (stack.node != nullptr)
         {
@@ -617,45 +613,42 @@ void blindSearch(PUZZLE *initialState)
             {
                 cout << "\n\t Agent found the solution!";
                 cout << "\n\t Agent says.. this is the solution Path: ";
-                int cost = printStates(first);
+                cost = printStates(first);
                 cout << "\n\n\t Expanded Nodes = " << counter;
                 cout << "\n\t Solution Cost  = " << cost - 1;
                 return;
             }
             counter++;
+
             if (movable(first, 'U'))
             {
-                PUZZLE *tmp = move(first, 'U');
+                tmp = move(first, 'U');
                 if (closed.notInList(tmp))
-                {
                     stack.insertToFront(tmp);
-                }
             }
+
             if (movable(first, 'R'))
             {
-                PUZZLE *tmp = move(first, 'R');
+                tmp = move(first, 'R');
                 if (closed.notInList(tmp))
-                {
                     stack.insertToFront(tmp);
-                }
             }
+
             if (movable(first, 'D'))
             {
-                PUZZLE *tmp = move(first, 'D');
+                tmp = move(first, 'D');
                 if (closed.notInList(tmp))
-                {
                     stack.insertToFront(tmp);
-                }
             }
+
             if (movable(first, 'L'))
             {
-                PUZZLE *tmp = move(first, 'L');
+                tmp = move(first, 'L');
                 if (closed.notInList(tmp))
-                {
                     stack.insertToFront(tmp);
-                }
             }
         }
+
         i++;
     }
 }
