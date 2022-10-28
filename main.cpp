@@ -13,7 +13,9 @@
 #include <iostream>
 #include <ctime>
 
-using namespace std;
+using std::cin;
+using std::cout;
+using std::string;
 
 // global final variable
 #define ROW_COL 3
@@ -95,8 +97,12 @@ public:
             cout << blankspace;
             for (y = 0; y < col; y++)
             {
-                string result = (this->board[x][y] == 0) ? " " : to_string(this->board[x][y]);
-                cout << "| " << result << " ";
+                cout << "| ";
+                if (this->board[x][y] == 0)
+                    cout << " ";
+                else
+                    cout << this->board[x][y];
+                cout << " ";
             }
             cout << "|\n";
         }
@@ -128,12 +134,8 @@ int tileDistance(PUZZLE *state, BLANK correctTile)
         for (int col = 0; col < ROW_COL; col++)
         {
             int i = correctTile.X, j = correctTile.Y;
-
             if (state->board[row][col] == goalState[i][j])
-            {
-                int localDist = abs(i - row) + abs(j - col);
-                return localDist;
-            }
+                return abs(i - row) + abs(j - col);
         }
     }
     return 0;
@@ -538,7 +540,7 @@ int printMoves(PUZZLE *state)
 /*** Algorithms ***/
 void heuristicSearch(PUZZLE *state)
 {
-    int counter = 0;
+    counter = 0;
     NODE openList;
     NODE closedList;
     openList.insertToFront(state);
