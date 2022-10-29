@@ -2,11 +2,7 @@ notes.txt
 /.vscode
 *.exe
 *.class
-/test/java
-/test/8-Puzzle-Solver-master
-.java
-/OS
-/test
-./test
+*.java
+*.c
 comments.cpp
-passed.cpp
+/revised
