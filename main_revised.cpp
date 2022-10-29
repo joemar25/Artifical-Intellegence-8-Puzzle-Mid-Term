@@ -164,6 +164,29 @@ public:
         // g(x) + h(n)
         return this->depth + misplaced;
     }
+
+    /**
+     * @note this function is used for checking the state is already in the visited list
+     *
+     * @param a
+     * @param b
+     *
+     *  compare each state and return if they were equally match or not
+     *
+     * @return true/false
+     */
+    bool compare(unsigned int _board[][ROW_COL])
+    {
+        for (x = 0; x < row; x++)
+        {
+            for (y = 0; y < col; y++)
+            {
+                if (this->board[x][y] != _board[x][y])
+                    return false;
+            }
+        }
+        return true;
+    }
 };
 
 /*** @note This contains the list of State of Puzzle ***/
@@ -178,29 +201,6 @@ public:
 };
 
 /*** FUNCTIONS to get Heuristic ***/
-
-/**
- * @note this function is used for checking the state is already in the visited list
- *
- * @param a
- * @param b
- *
- *  compare each state and return if they were equally match or not
- *
- * @return true/false
- */
-bool compareBoard(PUZZLE *a, PUZZLE *b)
-{
-    for (x = 0; x < row; x++)
-    {
-        for (y = 0; y < col; y++)
-        {
-            if (a->board[x][y] != b->board[x][y])
-                return false;
-        }
-    }
-    return true;
-}
 
 class NODE
 {
@@ -334,12 +334,12 @@ public:
      * @param state
      * @return true/false - this helps preventing insertion of the same node twice into the list
      */
-    bool notInList(PUZZLE *state)
+    bool isListed(PUZZLE *state)
     {
         STATE *tmplist = node;
         while (tmplist != nullptr)
         {
-            if (compareBoard(state, tmplist->state))
+            if ((state->compare(tmplist->state->board)))
                 return false;
             tmplist = tmplist->next;
         }
@@ -570,28 +570,28 @@ void heuristicSearch(PUZZLE *state)
         if (movable(bestState, 'U'))
         {
             tmp = move(bestState, 'U');
-            if (closedList.notInList(tmp))
+            if (closedList.isListed(tmp))
                 openList.insertToFront(tmp);
         }
 
         if (movable(bestState, 'R'))
         {
             tmp = move(bestState, 'R');
-            if (closedList.notInList(tmp))
+            if (closedList.isListed(tmp))
                 openList.insertToFront(tmp);
         }
 
         if (movable(bestState, 'D'))
         {
             tmp = move(bestState, 'D');
-            if (closedList.notInList(tmp))
+            if (closedList.isListed(tmp))
                 openList.insertToFront(tmp);
         }
 
         if (movable(bestState, 'L'))
         {
             tmp = move(bestState, 'L');
-            if (closedList.notInList(tmp))
+            if (closedList.isListed(tmp))
                 openList.insertToFront(tmp);
         }
 
@@ -632,28 +632,28 @@ void blindSearch(PUZZLE *initialState)
             if (movable(first, 'U'))
             {
                 tmp = move(first, 'U');
-                if (closed.notInList(tmp))
+                if (closed.isListed(tmp))
                     stack.insertToFront(tmp);
             }
 
             if (movable(first, 'R'))
             {
                 tmp = move(first, 'R');
-                if (closed.notInList(tmp))
+                if (closed.isListed(tmp))
                     stack.insertToFront(tmp);
             }
 
             if (movable(first, 'D'))
             {
                 tmp = move(first, 'D');
-                if (closed.notInList(tmp))
+                if (closed.isListed(tmp))
                     stack.insertToFront(tmp);
             }
 
             if (movable(first, 'L'))
             {
                 tmp = move(first, 'L');
-                if (closed.notInList(tmp))
+                if (closed.isListed(tmp))
                     stack.insertToFront(tmp);
             }
         }
