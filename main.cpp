@@ -1,14 +1,3 @@
-/**
- *
- * @file main.cpp
- *
- * @authors  - Balagtas, Arrlee
- *           - Cardiño, Joemar
- *           - Gomez, Olan
- *
- * @date 2022-10-05
- *
- */
 
 #include <iostream>
 #include <ctime>
@@ -26,19 +15,19 @@ const string blankspace = "\t                                                  "
 double cpuTimeUsed;
 clock_t start, end;
 
-// versatile global variable(s)
+// versatile global variable(puzzle)
 unsigned int counter, x, y, i, cost;
 const unsigned int goalState[][ROW_COL] = {{1, 2, 3}, {8, 0, 4}, {7, 6, 5}};
 
 /*** OBJECT tile, to keep track of a tile in PUZZLE ***/
-class BLANK
+class TILE
 {
 public:
     unsigned int X;
     unsigned int Y;
 
-    BLANK(){};
-    ~BLANK(){};
+    TILE(){};
+    ~TILE(){};
 
     void set(const unsigned int &_X, const unsigned int &_Y)
     {
@@ -47,31 +36,94 @@ public:
     }
 };
 
-/*** OBJECT puzzle***/
-class PUZZLE
+class DIRECTION
 {
 public:
+    string move;
+
+    void setDirection(const char &move)
+    {
+        if (move == 'U')
+            this->move = "UP";
+        if (move == 'L')
+            this->move = "LEFT";
+        if (move == 'D')
+            this->move = "DOWN";
+        if (move == 'R')
+            this->move = "RIGHT";
+        else
+            this->move = "START";
+    }
+
+    DIRECTION(){};
+    ~DIRECTION(){};
+};
+
+/*** OBJECT puzzle ***/
+class PUZZLE
+{
+
+    int *getLoc(int &_row, int &_col, const unsigned int board[][ROW_COL])
+    {
+        static int location[2];
+        for (x = 0; x < row; x++)
+        {
+            for (y = 0; y < col; y++)
+            {
+                if (board[x][y] == goalState[_row][_col])
+                {
+                    location[0] = x;
+                    location[1] = y;
+                }
+            }
+        }
+        return location;
+    }
+
+public:
+    PUZZLE *parent;                             // for backtracking the parent node of this current puzzle
     unsigned int board[ROW_COL][ROW_COL] = {0}; // puzzle object must have a board
     unsigned int depth;                         // depth attribute that will be used in IDS
-    unsigned int heuristic;                     // heuristic value of the current puzzle
-    char move;                                  // indicate move (U, D, L, R)
-    string move_indicator;                      // board move (UP, DOWN, LEFT, RIGHT)
-    BLANK blank_tile;                           // a puzzle must have a coordinate(s) of where the blank tile is
-    PUZZLE *parent;                             // for backtracking the parent node of this current puzzle
+    TILE blank;                                 // a puzzle must have a coordinate(puzzle) of where the blank tile is
+    DIRECTION direction;                        // board move (UP, DOWN, LEFT, RIGHT)
 
     /**
-     * @note this is a Contructor that used to Construct a new PUZZLE object
-     *       - we also provided a deconstructor...
-     *         Destructor - is an instance member function which is invoked
-     *         automatically whenever an object is going to be destroyed.
-     *         Meaning, a destructor is the last function that is going to
-     *         be called before an object is destroyed.
+     * @note - this is a Contructor that used to Construct a new PUZZLE object
+     *       - this function will set a state and set the blank tile for that state
+     *       - set heuristic to (-1) to determine if it is not yet calculated
+     *
+     * @param state
+     * @return PUZZLE*
      */
     PUZZLE(){};
-    ~PUZZLE(){};
+
+    PUZZLE(unsigned int puzzle[][ROW_COL])
+    {
+        for (x = 0; x < row; x++)
+        {
+            for (y = 0; y < col; y++)
+            {
+                if (puzzle[x][y] == 0)
+                    this->blank.set(x, y);
+                this->board[x][y] = puzzle[x][y];
+            }
+        }
+    };
+
+    /**
+     * @note  - we also provided a deconstructor...
+     *          Destructor - is an instance member function which is invoked
+     *          automatically whenever an object is going to be destroyed.
+     *          Meaning, a destructor is the last function that is going to
+     *          be called before an object is destroyed.
+     */
+    ~PUZZLE()
+    {
+        free(parent);
+    };
 
     // PUZZLE functions, when a puzzle object is created, it can use this functionalities (implemented in public)
-    bool isGoal()
+    bool isGoal() const
     {
         for (x = 0; x < row; x++)
         {
@@ -84,7 +136,7 @@ public:
         return true;
     }
 
-    void printBoard()
+    void display() const
     {
         for (x = 0; x < row; x++)
         {
@@ -111,7 +163,156 @@ public:
         for (y = 0; y < col; y++)
             cout << "+---";
         cout << "+\n";
-        cout << blankspace << "   " << this->move_indicator << "\n";
+        cout << blankspace << "   " << this->direction.move << "\n";
+    }
+
+    int f()
+    {
+        int heur = 0, row_diff = 0, col_diff = 0;
+        int *location = nullptr;
+
+        for (int i = 0; i < 3; i++)
+        {
+            for (int j = 0; j < 3; j++)
+            {
+                if (goalState[i][j] != 0)
+                {
+                    location = getLoc(i, j, this->board);
+                    row_diff = (i > location[0]) ? i - location[0] : location[0] - i;
+                    col_diff = (j > location[1]) ? j - location[1] : location[1] - j;
+                    heur += col_diff + row_diff;
+                }
+            }
+        }
+
+        location = nullptr;
+        delete location;
+        location = nullptr;
+        // g(x) + h(n)
+        return this->depth + heur;
+    }
+
+    /**
+     * @note this function is used for checking the state is already in the visited list
+     *
+     * @param a
+     * @param b
+     *
+     *  compare each state and return if they were equally match or not
+     *
+     * @return true/false
+     */
+    bool compare(unsigned int _board[][ROW_COL])
+    {
+        for (x = 0; x < row; x++)
+        {
+            for (y = 0; y < col; y++)
+            {
+                if (this->board[x][y] != _board[x][y])
+                    return false;
+            }
+        }
+        return true;
+    }
+
+    // get total cost for expansion
+    int getCost()
+    {
+        cost = 0;
+        while (this->parent != nullptr)
+        {
+            cost++;
+            this->parent = this->parent->parent;
+        }
+        return cost;
+    }
+
+    /**
+     * @brief check if move is possible
+     *
+     * @param state
+     * @param direction
+     * @return true/false
+     */
+    bool canMoveUp()
+    {
+        if (this->blank.X > 0)
+            return true;
+        return false;
+    }
+
+    bool canMoveLeft()
+    {
+        if (this->blank.Y > 0)
+            return true;
+        return false;
+    }
+
+    bool canMoveDown()
+    {
+        if (this->blank.X < ROW_COL - 1)
+            return true;
+        return false;
+    }
+
+    bool canMoveRight()
+    {
+        if (this->blank.Y < ROW_COL - 1)
+            return true;
+        return false;
+    }
+
+    // puzzle actions
+    PUZZLE *moveUp()
+    {
+        PUZZLE *temp = new PUZZLE(this->board);
+        temp->parent = this;
+        temp->depth = this->depth + 1;
+
+        temp->direction.move = "Up";
+        temp->board[temp->blank.X][temp->blank.Y] = temp->board[temp->blank.X - 1][temp->blank.Y];
+        temp->blank.X--;
+        temp->board[temp->blank.X][temp->blank.Y] = 0;
+        return temp;
+    }
+
+    PUZZLE *moveLeft()
+    {
+        PUZZLE *temp = new PUZZLE(this->board);
+        temp->parent = this;
+        temp->depth = this->depth + 1;
+
+        temp->direction.move = "Left";
+        temp->board[temp->blank.X][temp->blank.Y] = temp->board[temp->blank.X][temp->blank.Y - 1];
+        temp->blank.Y--;
+        temp->board[temp->blank.X][temp->blank.Y] = 0;
+        return temp;
+    }
+
+    PUZZLE *moveDown()
+    {
+        PUZZLE *temp = new PUZZLE(this->board);
+        temp->parent = this;
+        temp->depth = this->depth + 1;
+
+        temp->direction.move = "Down";
+        temp->board[temp->blank.X][temp->blank.Y] = temp->board[temp->blank.X + 1][temp->blank.Y];
+        temp->blank.X++;
+        temp->board[temp->blank.X][temp->blank.Y] = 0;
+        return temp;
+    }
+
+    PUZZLE *moveRight()
+    {
+        PUZZLE *temp = new PUZZLE(this->board);
+        temp->parent = this;
+        temp->depth = this->depth + 1;
+
+        temp->direction.move = "Right";
+        temp->board[temp->blank.X][temp->blank.Y] = temp->board[temp->blank.X][temp->blank.Y + 1];
+        temp->blank.Y++;
+        temp->board[temp->blank.X][temp->blank.Y] = 0;
+        return temp;
     }
 };
 
@@ -126,86 +327,22 @@ public:
     ~STATE(){};
 };
 
-/*** FUNCTIONS to get Heuristic ***/
-int tileDistance(PUZZLE *state, BLANK correctTile)
-{
-    for (int r = 0; r < row; r++)
-    {
-        for (int c = 0; c < col; c++)
-        {
-            int _x = correctTile.X, _y = correctTile.Y;
-            if (state->board[r][c] == goalState[_x][_y])
-                return abs(_x - r) + abs(_y - c);
-        }
-    }
-    return 0;
-}
-
-int getHeuristic(PUZZLE *state)
-{
-    if (state->heuristic != -1)
-        return state->heuristic;
-
-    int dist = 0;
-    BLANK correctTile;
-
-    for (x = 0; x < ROW_COL; x++)
-    {
-        for (y = 0; y < ROW_COL; y++)
-        {
-            if (state->board[x][y] != goalState[x][y])
-            {
-                correctTile.set(x, y);
-                dist += tileDistance(state, correctTile);
-            }
-        }
-    }
-    state->heuristic = dist + state->depth;
-    return dist + state->depth;
-}
-
-/**
- * @note this function is used for checking the state is already in the visited list
- *
- * @param a
- * @param b
- *
- *  compare each state and return if they were equally match or not
- *
- * @return true/false
- */
-bool isEqual(PUZZLE *a, PUZZLE *b)
-{
-    for (x = 0; x < row; x++)
-    {
-        for (y = 0; y < col; y++)
-        {
-            if (a->board[x][y] != b->board[x][y])
-                return false;
-        }
-    }
-    return true;
-}
-
 class NODE
 {
 public:
-    NODE(){};
-    ~NODE(){};
-
     STATE *node = nullptr; // an attribute for initializing an empty list of states
 
     PUZZLE *front()
     {
-        PUZZLE *tmp = nullptr;
+        PUZZLE *tempNode = nullptr;
         if (node != nullptr)
         {
-            tmp = node->state;
+            tempNode = node->state;
             STATE *temp = node;
             node = node->next;
             delete temp;
         }
-        return tmp;
+        return tempNode;
     }
 
     /**
@@ -218,17 +355,19 @@ public:
             front();
             return node->state;
         }
-        PUZZLE *tmp = nullptr;
+
+        PUZZLE *tempNode = nullptr;
         if (node != nullptr)
         {
             STATE *temp = node;
             while (temp->next != nullptr)
                 temp = temp->next;
-            tmp = temp->state;
+            tempNode = temp->state;
             delete temp;
             temp = nullptr;
         }
-        return tmp;
+
+        return tempNode;
     }
 
     /**
@@ -236,36 +375,36 @@ public:
      */
     PUZZLE *bestState()
     {
-        int min;
-        STATE *tmplist = node;
+        int minimum = 0;
+        STATE *templist = node;
         STATE *previous = nullptr;
         STATE *lowheur = nullptr;
-        PUZZLE *beststate = nullptr;
+        PUZZLE *best = nullptr;
 
         if (node->next == nullptr)
         {
-            beststate = node->state;
+            best = node->state;
             delete node;
             node = nullptr;
-            return beststate;
+            return best;
         }
 
-        min = getHeuristic(tmplist->state);
-        lowheur = tmplist;
+        minimum = templist->state->f();
+        lowheur = templist;
 
-        while (tmplist->next != nullptr)
+        while (templist->next != nullptr)
         {
-            int dist = getHeuristic(tmplist->next->state);
-            if (dist < min)
+            int dist = templist->next->state->f();
+            if (dist < minimum)
             {
-                previous = tmplist;
-                lowheur = tmplist->next;
-                min = dist;
+                previous = templist;
+                lowheur = templist->next;
+                minimum = dist;
             }
-            tmplist = tmplist->next;
+            templist = templist->next;
         }
 
-        beststate = lowheur->state;
+        best = lowheur->state;
 
         if (node != nullptr)
         {
@@ -278,39 +417,39 @@ public:
         }
 
         delete lowheur;
-        return beststate;
+        return best;
     }
 
     /**
      * @brief - this is a getter function that will use the Puzzle to insert on the Front of the List
      */
-    void insertToFront(PUZZLE *s)
+    void insertToFront(PUZZLE *puzzle)
     {
-        STATE *tmp = new (STATE);
-        tmp->state = s;
-        tmp->next = nullptr;
+        STATE *tempNode = new (STATE);
+        tempNode->state = puzzle;
+        tempNode->next = nullptr;
         if (node != nullptr)
-            tmp->next = node;
-        node = tmp;
+            tempNode->next = node;
+        node = tempNode;
     }
 
     /**
      * @brief - this is a getter function that will use the Puzzle to insert on the End of the List
      */
-    void insertToEnd(PUZZLE *s)
+    void insertToEnd(PUZZLE *puzzle)
     {
         if (node == nullptr)
         {
-            insertToFront(s);
+            insertToFront(puzzle);
             return;
         }
         STATE *temp = node;
-        STATE *tmp = new (STATE);
-        tmp->state = s;
-        tmp->next = nullptr;
+        STATE *tempNode = new (STATE);
+        tempNode->state = puzzle;
+        tempNode->next = nullptr;
         while (temp->next != nullptr)
             temp = temp->next;
-        temp->next = tmp;
+        temp->next = tempNode;
     }
 
     /**
@@ -319,20 +458,23 @@ public:
      * @param state
      * @return true/false - this helps preventing insertion of the same node twice into the list
      */
-    bool notInList(PUZZLE *state)
+    bool isListed(PUZZLE *state)
     {
-        STATE *tmplist = node;
-        while (tmplist != nullptr)
+        STATE *list = node;
+        while (list != nullptr)
         {
-            if (isEqual(state, tmplist->state))
+            if ((state->compare(list->state->board)))
                 return false;
-            tmplist = tmplist->next;
+            list = list->next;
         }
         return true;
     }
+
+    NODE(){};
+    ~NODE(){};
 };
 
-/*** USERS BASE TERMINAL GUI AND INPUT DESIGN ***/
+/*** USERS BASE TERMINAL INPUT AND DISPLAY ***/
 void printChoices()
 {
     cout << "\n\t* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *\n"
@@ -357,8 +499,7 @@ void printChoices()
  * @note - validate number if valid on our option list
  *
  * @param num
- * @return true
- * @return false
+ * @return true/false
  */
 bool isOptionValid(const int &num)
 {
@@ -388,33 +529,10 @@ void selectOption(unsigned int &input)
     }
 }
 
-/*** USEFULL actual function(s) ***/
-/**
- * @note - this function will set a state and set the blank tile for that state
- *       - set heuristic to (-1) to determine if it is not yet calculated
- *
- * @param state
- * @return PUZZLE*
- */
-PUZZLE *createNewState(unsigned int state[][ROW_COL])
-{
-    PUZZLE *tmp = new (PUZZLE);
-    for (x = 0; x < row; x++)
-    {
-        for (y = 0; y < col; y++)
-        {
-            if (state[x][y] == 0)
-                tmp->blank_tile.set(x, y);
-            tmp->board[x][y] = state[x][y];
-            tmp->heuristic = -1;
-        }
-    }
-    return tmp;
-}
-
+/*** USEFULL functions ***/
 /**
  * @brief - state will create a new state that acceps array which contains tile arrangment
- *        - which also gets and set the state's blank tile
+ *        - which also gets and set the state'puzzle blank tile
  *
  *        - set the depth limit
  *        - set move
@@ -425,227 +543,150 @@ PUZZLE *createNewState(unsigned int state[][ROW_COL])
  */
 PUZZLE *initialState(unsigned int board[][ROW_COL])
 {
-    PUZZLE *state = createNewState(board);
+    PUZZLE *state = new PUZZLE(board);
     state->depth = 0;
-    state->move = 'S';
-    state->move_indicator = "Initial";
+    state->direction.move = "Start";
     state->parent = nullptr;
     return state;
 }
 
-PUZZLE *move(PUZZLE *state, char direction)
+void solutionPath(PUZZLE *node)
 {
-    PUZZLE *tmp = createNewState(state->board);
-    tmp->parent = state;
-    tmp->depth = state->depth + 1;
-
-    // actions i.e move left, right, up and down
-    if (direction == 'U')
+    // If we hit the end of linked list, we return from there. End of recursion.
+    if (node == nullptr)
+        return;
+    if (node->direction.move[0] != 'S')
     {
-        tmp->move = 'U';
-        tmp->move_indicator = "Up";
-        tmp->board[tmp->blank_tile.X][tmp->blank_tile.Y] = tmp->board[tmp->blank_tile.X - 1][tmp->blank_tile.Y];
-        tmp->blank_tile.X--;
-        tmp->board[tmp->blank_tile.X][tmp->blank_tile.Y] = 0;
+        // Move one node forward towards the end of linked list.
+        solutionPath(node->parent);
+        // While coming back from the end of linked list, start printing the node values. Last node will be first one in recursive stack.
+        std::cout << node->direction.move[0] << " ";
     }
-    else if (direction == 'R')
-    {
-        tmp->move = 'R';
-        tmp->move_indicator = "Right";
-        tmp->board[tmp->blank_tile.X][tmp->blank_tile.Y] = tmp->board[tmp->blank_tile.X][tmp->blank_tile.Y + 1];
-        tmp->blank_tile.Y++;
-        tmp->board[tmp->blank_tile.X][tmp->blank_tile.Y] = 0;
-    }
-    else if (direction == 'D')
-    {
-        tmp->move = 'D';
-        tmp->move_indicator = "Down";
-        tmp->board[tmp->blank_tile.X][tmp->blank_tile.Y] = tmp->board[tmp->blank_tile.X + 1][tmp->blank_tile.Y];
-        tmp->blank_tile.X++;
-        tmp->board[tmp->blank_tile.X][tmp->blank_tile.Y] = 0;
-    }
-    else if (direction == 'L')
-    {
-        tmp->move = 'L';
-        tmp->move_indicator = "Left";
-        tmp->board[tmp->blank_tile.X][tmp->blank_tile.Y] = tmp->board[tmp->blank_tile.X][tmp->blank_tile.Y - 1];
-        tmp->blank_tile.Y--;
-        tmp->board[tmp->blank_tile.X][tmp->blank_tile.Y] = 0;
-    }
-    else
-        return nullptr;
-    return tmp;
 }
 
-/**
- * @brief check if move is possible
- *
- * @param state
- * @param direction
- * @return true/false
- */
-bool movable(PUZZLE *state, char direction)
+void displayPath(PUZZLE *node)
 {
-    if (direction == 'U')
+    if (node == nullptr)
+        return;
+    if (node->direction.move[0] != 'S')
     {
-        if (state->blank_tile.X > 0)
-            return true;
+        displayPath(node->parent);
+        node->display();
     }
-    else if (direction == 'R')
-    {
-        if (state->blank_tile.Y < ROW_COL - 1)
-            return true;
-    }
-    else if (direction == 'D')
-    {
-        if (state->blank_tile.X < ROW_COL - 1)
-            return true;
-    }
-    else if (direction == 'L')
-    {
-        if (state->blank_tile.Y > 0)
-            return true;
-    }
-    return false;
-}
-
-int printStates(PUZZLE *state)
-{
-    if (state == nullptr)
-        return 0;
-
-    i = printStates(state->parent) + 1;
-    if (state->move == 'S')
-        return i;
-    cout << " " << state->move;
-    return i;
-}
-
-int printMoves(PUZZLE *state)
-{
-    if (state == nullptr)
-        return 0;
-
-    if (state->move == 'S')
-        return i;
-    i = printMoves(state->parent) + 1;
-    state->printBoard();
-    return i;
 }
 
 /*** Algorithms ***/
-void heuristicSearch(PUZZLE *state)
+void AStar_Search(PUZZLE *state)
 {
     counter = 0;
+    PUZZLE *temp_puzzle;
+
     NODE openList, closedList;
-    PUZZLE *tmp;
 
     openList.insertToFront(state);
 
     while (openList.node != nullptr)
     {
-        PUZZLE *bestState = openList.bestState();
-        closedList.insertToFront(bestState);
+        PUZZLE *puzzle = openList.bestState();
+        closedList.insertToFront(puzzle);
 
-        if (bestState->isGoal())
+        if (puzzle->isGoal())
         {
-            printMoves(bestState);
-            cout << "\n\t Agent found the solution!";
-            cout << "\n\t Agent says.. this is the solution Path: ";
-            cost = printStates(bestState);
-            cout << "\n\n\t Expanded Nodes = " << counter;
-            cout << "\n\t Solution Cost  = " << cost - 1;
+            displayPath(puzzle);
+            cout << "\n\t Solution Path: ";
+            solutionPath(puzzle);
+            cout << "\n\t Solution Cost  = " << puzzle->getCost();
+            cout << "\n\t Expanded Nodes = " << counter;
             return;
         }
 
-        if (movable(bestState, 'U'))
+        if (puzzle->canMoveUp())
         {
-            tmp = move(bestState, 'U');
-            if (closedList.notInList(tmp))
-                openList.insertToFront(tmp);
+            temp_puzzle = puzzle->moveUp();
+            if (closedList.isListed(temp_puzzle))
+                openList.insertToFront(temp_puzzle);
         }
 
-        if (movable(bestState, 'R'))
+        if (puzzle->canMoveRight())
         {
-            tmp = move(bestState, 'R');
-            if (closedList.notInList(tmp))
-                openList.insertToFront(tmp);
+            temp_puzzle = puzzle->moveRight();
+            if (closedList.isListed(temp_puzzle))
+                openList.insertToFront(temp_puzzle);
         }
 
-        if (movable(bestState, 'D'))
+        if (puzzle->canMoveDown())
         {
-            tmp = move(bestState, 'D');
-            if (closedList.notInList(tmp))
-                openList.insertToFront(tmp);
+            temp_puzzle = puzzle->moveDown();
+            if (closedList.isListed(temp_puzzle))
+                openList.insertToFront(temp_puzzle);
         }
 
-        if (movable(bestState, 'L'))
+        if (puzzle->canMoveLeft())
         {
-            tmp = move(bestState, 'L');
-            if (closedList.notInList(tmp))
-                openList.insertToFront(tmp);
+            temp_puzzle = puzzle->moveLeft();
+            if (closedList.isListed(temp_puzzle))
+                openList.insertToFront(temp_puzzle);
         }
 
         counter++;
     }
 }
 
-void blindSearch(PUZZLE *initialState)
+void IDS_Search(PUZZLE *initialState)
 {
     i = 0, counter = 0;
 
     while (true)
     {
         NODE closed, stack;
-        PUZZLE *tmp;
+        PUZZLE *temp_puzzle;
 
         stack.insertToFront(initialState);
         while (stack.node != nullptr)
         {
-            PUZZLE *first = stack.front();
+            PUZZLE *puzzle = stack.front();
 
-            if (first->depth > i)
+            if (puzzle->depth > i)
                 continue;
 
-            closed.insertToFront(first);
+            closed.insertToFront(puzzle);
 
-            if (first->isGoal())
+            if (puzzle->isGoal())
             {
-                cout << "\n\t Agent found the solution!";
-                cout << "\n\t Agent says.. this is the solution Path: ";
-                cost = printStates(first);
-                cout << "\n\n\t Expanded Nodes = " << counter;
-                cout << "\n\t Solution Cost  = " << cost - 1;
+                cout << "\n\t Solution Path: ";
+                solutionPath(puzzle);
+                cout << "\n\t Solution Cost  = " << puzzle->getCost();
+                cout << "\n\t Expanded Nodes = " << counter;
                 return;
             }
             counter++;
 
-            if (movable(first, 'U'))
+            if (puzzle->canMoveUp())
             {
-                tmp = move(first, 'U');
-                if (closed.notInList(tmp))
-                    stack.insertToFront(tmp);
+                temp_puzzle = puzzle->moveUp();
+                if (closed.isListed(temp_puzzle))
+                    stack.insertToFront(temp_puzzle);
             }
 
-            if (movable(first, 'R'))
+            if (puzzle->canMoveRight())
             {
-                tmp = move(first, 'R');
-                if (closed.notInList(tmp))
-                    stack.insertToFront(tmp);
+                temp_puzzle = puzzle->moveRight();
+                if (closed.isListed(temp_puzzle))
+                    stack.insertToFront(temp_puzzle);
             }
 
-            if (movable(first, 'D'))
+            if (puzzle->canMoveDown())
             {
-                tmp = move(first, 'D');
-                if (closed.notInList(tmp))
-                    stack.insertToFront(tmp);
+                temp_puzzle = puzzle->moveDown();
+                if (closed.isListed(temp_puzzle))
+                    stack.insertToFront(temp_puzzle);
             }
 
-            if (movable(first, 'L'))
+            if (puzzle->canMoveLeft())
             {
-                tmp = move(first, 'L');
-                if (closed.notInList(tmp))
-                    stack.insertToFront(tmp);
+                temp_puzzle = puzzle->moveLeft();
+                if (closed.isListed(temp_puzzle))
+                    stack.insertToFront(temp_puzzle);
             }
         }
 
@@ -693,12 +734,12 @@ int main(int argc, char **argv)
         if (user_input == 4)
             init = initialState(worst);
 
-        init->printBoard();
+        init->display();
 
         // A*
-        cout << "\n\t Agent is using A*\n\t Agent is now searching for solution ...\n";
+        cout << "\n\t Agent is using A*... \n";
         start = clock();
-        heuristicSearch(init);
+        AStar_Search(init);
         end = clock();
         cpuTimeUsed = ((double)(end - start)) / CLOCKS_PER_SEC;
         cout << "\n\t Running Time   = " << cpuTimeUsed << "\n";
@@ -706,9 +747,9 @@ int main(int argc, char **argv)
         cout << "\n\t=================================================================================\n";
 
         // IDS
-        cout << "\n\t Agent is using IDS\n\t Agent is now searching for solution ...";
+        cout << "\n\t Agent is using IDS...";
         start = clock();
-        blindSearch(init);
+        IDS_Search(init);
         end = clock();
         cpuTimeUsed = ((double)(end - start)) / CLOCKS_PER_SEC;
         cout << "\n\t Running Time   = " << cpuTimeUsed << "\n";

@@ -4,5 +4,4 @@ notes.txt
 *.class
 *.java
 *.c
-comments.cpp
-/revised
+/includes
