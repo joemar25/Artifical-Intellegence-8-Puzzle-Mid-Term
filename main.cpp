@@ -9,7 +9,6 @@ using std::string;
 // global final variable
 #define ROW_COL 3
 const unsigned int row = 3, col = 3;
-const string blankspace = "\t                                                  ";
 
 // measure the running time
 double cpuTimeUsed;
@@ -140,13 +139,13 @@ public:
     {
         for (x = 0; x < row; x++)
         {
-            cout << blankspace;
+            cout << "\t                                                  ";
             for (y = 0; y < col; y++)
                 cout
                     << "+---";
             cout << "+\n";
 
-            cout << blankspace;
+            cout << "\t                                                  ";
             for (y = 0; y < col; y++)
             {
                 cout << "| ";
@@ -159,11 +158,12 @@ public:
             cout << "|\n";
         }
 
-        cout << blankspace;
+        cout << "\t                                                  ";
         for (y = 0; y < col; y++)
             cout << "+---";
         cout << "+\n";
-        cout << blankspace << "   " << this->direction.move << "\n";
+        cout << "\t                                                  "
+             << "   " << this->direction.move << "\n";
     }
 
     int f()
@@ -596,7 +596,8 @@ void AStar_Search(PUZZLE *state)
 
         if (puzzle->isGoal())
         {
-            cout << blankspace << " Generating A* Path...\n\n";
+            cout << "\t                                                  "
+                 << " Generating A* Path...\n\n";
             displayPath(puzzle);
             cout << "\n\t Agent is using A*... \n";
             cout << "\n\t Solution Path: ";
