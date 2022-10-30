@@ -1,3 +1,14 @@
+/**
+ *
+ * @file main.cpp
+ *
+ * @authors  - Balagtas, Arrlee
+ *           - Cardiño, Joemar
+ *           - Gomez, Olan
+ *
+ * @date 2022-10-05
+ *
+ */
 
 #include <iostream>
 #include <ctime>
