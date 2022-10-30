@@ -641,6 +641,7 @@ void AStar_Search(PUZZLE *state)
 
 void IDS_Search(PUZZLE *initialState)
 {
+    cout << "\n\t Agent is using IDS...";
     i = 0, counter = 0;
 
     while (true)
@@ -660,7 +661,6 @@ void IDS_Search(PUZZLE *initialState)
 
             if (puzzle->isGoal())
             {
-                cout << "\n\t Agent is using IDS...";
                 cout << "\n\t Solution Path: ";
                 solutionPath(puzzle);
                 cout << "\n\t Solution Cost  = " << puzzle->getCost();
