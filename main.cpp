@@ -171,9 +171,9 @@ public:
         int heur = 0, row_diff = 0, col_diff = 0;
         int *location = nullptr;
 
-        for (int i = 0; i < 3; i++)
+        for (int i = 0; i < row; i++)
         {
-            for (int j = 0; j < 3; j++)
+            for (int j = 0; j < col; j++)
             {
                 if (goalState[i][j] != 0)
                 {
@@ -552,18 +552,23 @@ PUZZLE *initialState(unsigned int board[][ROW_COL])
 
 void solutionPath(PUZZLE *node)
 {
-    // If we hit the end of linked list, we return from there. End of recursion.
+    // If we hit the end of list, we return from there. End of recursion.
     if (node == nullptr)
         return;
     if (node->direction.move[0] != 'S')
     {
-        // Move one node forward towards the end of linked list.
+        // Move one node forward towards the end of list.
         solutionPath(node->parent);
-        // While coming back from the end of linked list, start printing the node values. Last node will be first one in recursive stack.
+        // While coming back from the end of list, start printing the node values. Last node will be first one in recursive stack.
         std::cout << node->direction.move[0] << " ";
     }
 }
 
+/**
+ * @note - this will display the path -> puzzle by puzzle
+ *
+ * @param node
+ */
 void displayPath(PUZZLE *node)
 {
     if (node == nullptr)
@@ -592,7 +597,9 @@ void AStar_Search(PUZZLE *state)
 
         if (puzzle->isGoal())
         {
+            cout << blankspace << " Generating A* Path...\n\n";
             displayPath(puzzle);
+            cout << "\n\t Agent is using A*... \n";
             cout << "\n\t Solution Path: ";
             solutionPath(puzzle);
             cout << "\n\t Solution Cost  = " << puzzle->getCost();
@@ -653,6 +660,7 @@ void IDS_Search(PUZZLE *initialState)
 
             if (puzzle->isGoal())
             {
+                cout << "\n\t Agent is using IDS...";
                 cout << "\n\t Solution Path: ";
                 solutionPath(puzzle);
                 cout << "\n\t Solution Cost  = " << puzzle->getCost();
@@ -737,7 +745,6 @@ int main(int argc, char **argv)
         init->display();
 
         // A*
-        cout << "\n\t Agent is using A*... \n";
         start = clock();
         AStar_Search(init);
         end = clock();
@@ -747,7 +754,6 @@ int main(int argc, char **argv)
         cout << "\n\t=================================================================================\n";
 
         // IDS
-        cout << "\n\t Agent is using IDS...";
         start = clock();
         IDS_Search(init);
         end = clock();
