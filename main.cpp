@@ -202,7 +202,7 @@ public:
      *
      * @return true/false
      */
-    bool compare(unsigned int _board[][ROW_COL])
+    bool compare(unsigned int _board[][ROW_COL]) const
     {
         for (x = 0; x < row; x++)
         {
@@ -234,28 +234,28 @@ public:
      * @param direction
      * @return true/false
      */
-    bool canMoveUp()
+    bool canMoveUp() const
     {
         if (this->blank.X > 0)
             return true;
         return false;
     }
 
-    bool canMoveLeft()
+    bool canMoveLeft() const
     {
         if (this->blank.Y > 0)
             return true;
         return false;
     }
 
-    bool canMoveDown()
+    bool canMoveDown() const
     {
         if (this->blank.X < ROW_COL - 1)
             return true;
         return false;
     }
 
-    bool canMoveRight()
+    bool canMoveRight() const
     {
         if (this->blank.Y < ROW_COL - 1)
             return true;
@@ -529,7 +529,6 @@ void selectOption(unsigned int &input)
     }
 }
 
-/*** USEFULL functions ***/
 /**
  * @brief - state will create a new state that acceps array which contains tile arrangment
  *        - which also gets and set the state'puzzle blank tile
