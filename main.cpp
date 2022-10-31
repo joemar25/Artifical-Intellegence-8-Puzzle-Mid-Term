@@ -359,27 +359,27 @@ public:
     /**
      * @brief - this returns the end of the node
      */
-    PUZZLE *end()
-    {
-        if (node->next == nullptr)
-        {
-            front();
-            return node->state;
-        }
+    // PUZZLE *end()
+    // {
+    //     if (node->next == nullptr)
+    //     {
+    //         front();
+    //         return node->state;
+    //     }
 
-        PUZZLE *tempNode = nullptr;
-        if (node != nullptr)
-        {
-            STATE *temp = node;
-            while (temp->next != nullptr)
-                temp = temp->next;
-            tempNode = temp->state;
-            delete temp;
-            temp = nullptr;
-        }
+    //     PUZZLE *tempNode = nullptr;
+    //     if (node != nullptr)
+    //     {
+    //         STATE *temp = node;
+    //         while (temp->next != nullptr)
+    //             temp = temp->next;
+    //         tempNode = temp->state;
+    //         delete temp;
+    //         temp = nullptr;
+    //     }
 
-        return tempNode;
-    }
+    //     return tempNode;
+    // }
 
     /**
      * @brief - use to get the best state
@@ -434,7 +434,7 @@ public:
     /**
      * @brief - this is a getter function that will use the Puzzle to insert on the Front of the List
      */
-    void insertToFront(PUZZLE *puzzle)
+    void insert(PUZZLE *puzzle)
     {
         STATE *tempNode = new (STATE);
         tempNode->state = puzzle;
@@ -444,24 +444,24 @@ public:
         node = tempNode;
     }
 
-    /**
-     * @brief - this is a getter function that will use the Puzzle to insert on the End of the List
-     */
-    void insertToEnd(PUZZLE *puzzle)
-    {
-        if (node == nullptr)
-        {
-            insertToFront(puzzle);
-            return;
-        }
-        STATE *temp = node;
-        STATE *tempNode = new (STATE);
-        tempNode->state = puzzle;
-        tempNode->next = nullptr;
-        while (temp->next != nullptr)
-            temp = temp->next;
-        temp->next = tempNode;
-    }
+    // /**
+    //  * @brief - this is a getter function that will use the Puzzle to insert on the End of the List
+    //  */
+    // void insertToEnd(PUZZLE *puzzle)
+    // {
+    //     if (node == nullptr)
+    //     {
+    //         insert(puzzle);
+    //         return;
+    //     }
+    //     STATE *temp = node;
+    //     STATE *tempNode = new (STATE);
+    //     tempNode->state = puzzle;
+    //     tempNode->next = nullptr;
+    //     while (temp->next != nullptr)
+    //         temp = temp->next;
+    //     temp->next = tempNode;
+    // }
 
     /**
      * @brief - this returns false or true if the given state is already in the list or not
@@ -569,7 +569,7 @@ void solutionPath(PUZZLE *node)
     {
         // Move one node forward towards the end of list.
         solutionPath(node->parent);
-        // While coming back from the end of list, start printing the node values. Last node will be first one in recursive stack.
+        // While coming back from the end of list, start printing the node values. Last node will be first one in recursive open.
         std::cout << node->direction.move[0] << " ";
     }
 }
@@ -597,12 +597,12 @@ void AStar_Search(PUZZLE *state)
 
     NODE openList, closedList;
 
-    openList.insertToFront(state);
+    openList.insert(state);
 
     while (openList.node != nullptr)
     {
         PUZZLE *puzzle = openList.bestState();
-        closedList.insertToFront(puzzle);
+        closedList.insert(puzzle);
 
         if (puzzle->isGoal())
         {
@@ -620,25 +620,25 @@ void AStar_Search(PUZZLE *state)
         if (puzzle->canMoveUp())
         {
             if (closedList.isListed(puzzle->moveUp()))
-                openList.insertToFront(puzzle->moveUp());
+                openList.insert(puzzle->moveUp());
         }
 
         if (puzzle->canMoveLeft())
         {
             if (closedList.isListed(puzzle->moveLeft()))
-                openList.insertToFront(puzzle->moveLeft());
+                openList.insert(puzzle->moveLeft());
         }
 
         if (puzzle->canMoveDown())
         {
             if (closedList.isListed(puzzle->moveDown()))
-                openList.insertToFront(puzzle->moveDown());
+                openList.insert(puzzle->moveDown());
         }
 
         if (puzzle->canMoveRight())
         {
             if (closedList.isListed(puzzle->moveRight()))
-                openList.insertToFront(puzzle->moveRight());
+                openList.insert(puzzle->moveRight());
         }
 
         counter++;
@@ -652,17 +652,17 @@ void IDS_Search(PUZZLE *initialState)
 
     while (true)
     {
-        NODE closed, stack;
+        NODE closed, open;
 
-        stack.insertToFront(initialState);
-        while (stack.node != nullptr)
+        open.insert(initialState);
+        while (open.node != nullptr)
         {
-            PUZZLE *puzzle = stack.front();
+            PUZZLE *puzzle = open.front();
 
             if (puzzle->depth > i)
                 continue;
 
-            closed.insertToFront(puzzle);
+            closed.insert(puzzle);
 
             if (puzzle->isGoal())
             {
@@ -678,25 +678,25 @@ void IDS_Search(PUZZLE *initialState)
             if (puzzle->canMoveUp())
             {
                 if (closed.isListed(puzzle->moveUp()))
-                    stack.insertToFront(puzzle->moveUp());
+                    open.insert(puzzle->moveUp());
             }
 
             if (puzzle->canMoveLeft())
             {
                 if (closed.isListed(puzzle->moveLeft()))
-                    stack.insertToFront(puzzle->moveLeft());
+                    open.insert(puzzle->moveLeft());
             }
 
             if (puzzle->canMoveDown())
             {
                 if (closed.isListed(puzzle->moveDown()))
-                    stack.insertToFront(puzzle->moveDown());
+                    open.insert(puzzle->moveDown());
             }
 
             if (puzzle->canMoveRight())
             {
                 if (closed.isListed(puzzle->moveRight()))
-                    stack.insertToFront(puzzle->moveRight());
+                    open.insert(puzzle->moveRight());
             }
         }
 
