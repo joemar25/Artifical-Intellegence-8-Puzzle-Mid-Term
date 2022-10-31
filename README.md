@@ -33,33 +33,43 @@ This project is about showcasing how the two algorithms (IDS and A*) solve the 8
 
 ## Test Run
 
-<p align="center"> Generated Path for A* Search </p>
-
-<img src="https://github.com/joemar25/Files/blob/main/ai-mid-term-out.PNG?raw=true" >
-
-### Easy
-
 <p align="center"> Input </p>
 
 <img src="https://github.com/joemar25/Files/blob/main/easy-in.PNG?raw=true">
 
+> Note: Any Numbers from 1-5 can be put in this input statement to choose which puzzle configuration to Solve.
+
+<p align="center"> Generated Path for A* Search </p>
+
+<img src="https://github.com/joemar25/Files/blob/main/ai-mid-term-out.PNG?raw=true" >
+
+> Only A* Search can output this, since it has less generated nodes than IDS.
+
+### Easy
+
 <p align="center"> Output </p>
 
-<img src="https://github.com/joemar25/Files/blob/main/easy-out-1.PNG?raw=true" >
+<img src="https://github.com/joemar25/Files/blob/main/easy-out.PNG?raw=true" >
 
 ### Medium
 
+<p align="center"> Output </p>
+
+<img src="https://github.com/joemar25/Files/blob/main/medium-out.PNG?raw=true" >
+
 ### Hard
+
+<p align="center"> Output </p>
+
+<img src="https://github.com/joemar25/Files/blob/main/hard-out.PNG?raw=true" >
 
 ### Worst
 
-<br>
+<p align="center"> Output </p>
 
----
+<img src="https://github.com/joemar25/Files/blob/main/worst-out.PNG?raw=true" >
 
-<br>
-
-## Test Output
+> Worst is solvable but will take a while - about (2 - 4) min to solve.
 
 <br>
 
