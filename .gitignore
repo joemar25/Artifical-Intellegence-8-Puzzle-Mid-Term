@@ -1,8 +1,6 @@
-notes.txt
 /.vscode
+/includes
 *.exe
 *.class
 *.java
 *.c
-/includes
-/model.drawio
