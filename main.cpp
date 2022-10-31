@@ -594,7 +594,6 @@ void displayPath(PUZZLE *node)
 void AStar_Search(PUZZLE *state)
 {
     counter = 0;
-    PUZZLE *temp_puzzle;
 
     NODE openList, closedList;
 
@@ -620,30 +619,26 @@ void AStar_Search(PUZZLE *state)
 
         if (puzzle->canMoveUp())
         {
-            temp_puzzle = puzzle->moveUp();
-            if (closedList.isListed(temp_puzzle))
-                openList.insertToFront(temp_puzzle);
-        }
-
-        if (puzzle->canMoveRight())
-        {
-            temp_puzzle = puzzle->moveRight();
-            if (closedList.isListed(temp_puzzle))
-                openList.insertToFront(temp_puzzle);
-        }
-
-        if (puzzle->canMoveDown())
-        {
-            temp_puzzle = puzzle->moveDown();
-            if (closedList.isListed(temp_puzzle))
-                openList.insertToFront(temp_puzzle);
+            if (closedList.isListed(puzzle->moveUp()))
+                openList.insertToFront(puzzle->moveUp());
         }
 
         if (puzzle->canMoveLeft())
         {
-            temp_puzzle = puzzle->moveLeft();
-            if (closedList.isListed(temp_puzzle))
-                openList.insertToFront(temp_puzzle);
+            if (closedList.isListed(puzzle->moveLeft()))
+                openList.insertToFront(puzzle->moveLeft());
+        }
+
+        if (puzzle->canMoveDown())
+        {
+            if (closedList.isListed(puzzle->moveDown()))
+                openList.insertToFront(puzzle->moveDown());
+        }
+
+        if (puzzle->canMoveRight())
+        {
+            if (closedList.isListed(puzzle->moveRight()))
+                openList.insertToFront(puzzle->moveRight());
         }
 
         counter++;
@@ -658,7 +653,6 @@ void IDS_Search(PUZZLE *initialState)
     while (true)
     {
         NODE closed, stack;
-        PUZZLE *temp_puzzle;
 
         stack.insertToFront(initialState);
         while (stack.node != nullptr)
@@ -678,34 +672,31 @@ void IDS_Search(PUZZLE *initialState)
                 cout << "\n\t Expanded Nodes = " << counter;
                 return;
             }
+
             counter++;
 
             if (puzzle->canMoveUp())
             {
-                temp_puzzle = puzzle->moveUp();
-                if (closed.isListed(temp_puzzle))
-                    stack.insertToFront(temp_puzzle);
-            }
-
-            if (puzzle->canMoveRight())
-            {
-                temp_puzzle = puzzle->moveRight();
-                if (closed.isListed(temp_puzzle))
-                    stack.insertToFront(temp_puzzle);
-            }
-
-            if (puzzle->canMoveDown())
-            {
-                temp_puzzle = puzzle->moveDown();
-                if (closed.isListed(temp_puzzle))
-                    stack.insertToFront(temp_puzzle);
+                if (closed.isListed(puzzle->moveUp()))
+                    stack.insertToFront(puzzle->moveUp());
             }
 
             if (puzzle->canMoveLeft())
             {
-                temp_puzzle = puzzle->moveLeft();
-                if (closed.isListed(temp_puzzle))
-                    stack.insertToFront(temp_puzzle);
+                if (closed.isListed(puzzle->moveLeft()))
+                    stack.insertToFront(puzzle->moveLeft());
+            }
+
+            if (puzzle->canMoveDown())
+            {
+                if (closed.isListed(puzzle->moveDown()))
+                    stack.insertToFront(puzzle->moveDown());
+            }
+
+            if (puzzle->canMoveRight())
+            {
+                if (closed.isListed(puzzle->moveRight()))
+                    stack.insertToFront(puzzle->moveRight());
             }
         }
 
