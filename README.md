@@ -19,13 +19,12 @@ This project is about showcasing how the two algorithms (IDS and A*) solve the 8
 ## Tables of Contents
 
 1. [Actual Test Run](#test-run)
-2. [Actual Output](#the-output)
-3. [What are the Problems we encountered?](#problems-encuntered)
-4. [How did we solve those problems?](#solving-problems)
-5. [Functions](#functions)
-6. [Solving Algorithms](#solving-algorithms)
-7. [Analysis](#analysis)
-8. [References Used](#references)
+2. [What are the Problems we encountered?](#problems-encuntered)
+3. [How did we solve those problems?](#solving-problems)
+4. [Functions](#functions)
+5. [Solving Algorithms](#solving-algorithms)
+6. [Analysis](#analysis)
+7. [References Used](#references)
 
 <br>
 
