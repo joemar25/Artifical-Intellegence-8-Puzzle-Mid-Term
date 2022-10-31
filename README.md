@@ -35,11 +35,11 @@ This project is about showcasing how the two algorithms (IDS and A*) solve the 8
 
 <p align="center"> Input </p>
 
-<img src="/includes/images/easy-in.PNG" height="60" width="60" >
+<img src="https://github.com/joemar25/Files/blob/main/easy-in.PNG?raw=true" height="60" width="60" >
 
 <p align="center"> Output </p>
 
-<img src="/includes/images/easy-out.PNG" height="60" width="60" >
+<img src="https://github.com/joemar25/Files/blob/main/easy-out.PNG?raw=true" height="60" width="60" >
 
 ### Easy
 
