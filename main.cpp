@@ -357,31 +357,6 @@ public:
     }
 
     /**
-     * @brief - this returns the end of the node
-     */
-    // PUZZLE *end()
-    // {
-    //     if (node->next == nullptr)
-    //     {
-    //         front();
-    //         return node->state;
-    //     }
-
-    //     PUZZLE *tempNode = nullptr;
-    //     if (node != nullptr)
-    //     {
-    //         STATE *temp = node;
-    //         while (temp->next != nullptr)
-    //             temp = temp->next;
-    //         tempNode = temp->state;
-    //         delete temp;
-    //         temp = nullptr;
-    //     }
-
-    //     return tempNode;
-    // }
-
-    /**
      * @brief - use to get the best state
      */
     PUZZLE *bestState()
@@ -443,25 +418,6 @@ public:
             tempNode->next = node;
         node = tempNode;
     }
-
-    // /**
-    //  * @brief - this is a getter function that will use the Puzzle to insert on the End of the List
-    //  */
-    // void insertToEnd(PUZZLE *puzzle)
-    // {
-    //     if (node == nullptr)
-    //     {
-    //         insert(puzzle);
-    //         return;
-    //     }
-    //     STATE *temp = node;
-    //     STATE *tempNode = new (STATE);
-    //     tempNode->state = puzzle;
-    //     tempNode->next = nullptr;
-    //     while (temp->next != nullptr)
-    //         temp = temp->next;
-    //     temp->next = tempNode;
-    // }
 
     /**
      * @brief - this returns false or true if the given state is already in the list or not
