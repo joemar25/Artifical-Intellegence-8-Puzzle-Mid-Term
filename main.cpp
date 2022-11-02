@@ -562,10 +562,9 @@ void AStar_Search(PUZZLE *state)
 
         if (puzzle->isGoal())
         {
-            cout << "\t                                                  "
-                 << " Generating A* Path...\n\n";
+            cout << "\tGenerating A* Path...\n\n";
             displayPath(puzzle);
-            cout << "\n\t Agent is using A*... \n";
+            cout << "\n\t Agent is using A*...";
             cout << "\n\t Solution Path: ";
             solutionPath(puzzle);
             cout << "\n\t Solution Cost  = " << puzzle->getCost();
