@@ -549,11 +549,11 @@ void displayPath(PUZZLE *node)
 /*** Algorithms ***/
 void AStar_Search(PUZZLE *state)
 {
+    counter = 0;
+
     NODE openList, closedList;
 
     openList.insert(state);
-
-    counter = 0;
 
     while (openList.node != nullptr)
     {
@@ -662,14 +662,13 @@ void IDS_Search(PUZZLE *initialState)
 int main(int argc, char **argv)
 {
     unsigned int user_input = 0, end = 0;
-    PUZZLE *init = new PUZZLE();
+    PUZZLE *init = nullptr;
 
     // PUZZLE default config
     unsigned int easy[][ROW_COL] = {{1, 3, 4}, {8, 6, 2}, {7, 0, 5}};
     unsigned int medium[][ROW_COL] = {{2, 8, 1}, {0, 4, 3}, {7, 6, 5}};
     unsigned int hard[][ROW_COL] = {{2, 8, 1}, {4, 6, 3}, {7, 5, 0}};
     unsigned int worst[][ROW_COL] = {{5, 6, 7}, {4, 0, 8}, {3, 2, 1}};
-    unsigned int preferred[][ROW_COL] = {{2, 0, 1}, {4, 8, 3}, {7, 6, 5}};
     unsigned int input[][ROW_COL] = {0};
 
     do
