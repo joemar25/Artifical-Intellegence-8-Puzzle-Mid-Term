@@ -31,15 +31,13 @@ This project is about showcasing how the two algorithms (IDS and A*) solve the 8
 
 ## Test Run
 
-<p align="center"> Input </p>
-
-<img align="center" src="https://github.com/joemar25/Files/blob/main/easy-in.PNG?raw=true">
+<p align="center"> Input <br> <img align="center" src="https://github.com/joemar25/Files/blob/main/easy-in.PNG?raw=true"> </p>
 
 > Note: Any Numbers from 1-5 can be put in this input statement to choose which puzzle configuration to Solve.
 
-<p align="center"> Generated Path for A* Search </p>
+<p align="center"> Generated Path for A* Search <br>
 
-<img align="center" src="https://github.com/joemar25/Files/blob/main/ai-mid-term-out.PNG?raw=true" >
+<img align="center" src="https://github.com/joemar25/Files/blob/main/ai-mid-term-out.PNG?raw=true" > </p>
 
 > Only A* Search can output this, since it has less generated nodes than IDS.
 
