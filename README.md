@@ -35,9 +35,7 @@ This project is about showcasing how the two algorithms (IDS and A*) solve the 8
 
 > Note: Any Numbers from 1-5 can be put in this input statement to choose which puzzle configuration to Solve.
 
-<p align="center"> Generated Path for A* Search <br>
-
-<img align="center" src="https://github.com/joemar25/Files/blob/main/ai-mid-term-out.PNG?raw=true" > </p>
+<p align="center"> Generated Path for A* Search <br> <img align="center" src="https://github.com/joemar25/Files/blob/main/ai-mid-term-out.PNG?raw=true" > </p>
 
 > Only A* Search can output this, since it has less generated nodes than IDS.
 
@@ -74,6 +72,12 @@ This project is about showcasing how the two algorithms (IDS and A*) solve the 8
 <br>
 
 ## Functions
+
+```
+Terminologies...
+    - unsigned int var_name; -> only takes unsigned integer values (1, 2, 5, etc...) and not (-1, -3, 25, etc...)
+    - delete pointer; -> Delete operator deallocates memory from heap
+```
 
 ```c++
 int main(int argc, char **argv)
