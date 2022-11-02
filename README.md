@@ -45,27 +45,19 @@ This project is about showcasing how the two algorithms (IDS and A*) solve the 8
 
 ### Easy
 
-<p align="center"> Output </p>
-
-<img align="center" src="https://github.com/joemar25/Files/blob/main/easy-out.PNG?raw=true" >
+<p align="center"> Output <br> <img align="center" src="https://github.com/joemar25/Files/blob/main/easy-out.PNG?raw=true" > </p>
 
 ### Medium
 
-<p align="center"> Output </p>
-
-<img align="center" src="https://github.com/joemar25/Files/blob/main/medium-out.PNG?raw=true" >
+<p align="center"> Output <br> <img align="center" src="https://github.com/joemar25/Files/blob/main/medium-out.PNG?raw=true" > </p>
 
 ### Hard
 
-<p align="center"> Output </p>
-
-<img align="center" src="https://github.com/joemar25/Files/blob/main/hard-out.PNG?raw=true" >
+<p align="center"> Output <br> <img align="center" src="https://github.com/joemar25/Files/blob/main/hard-out.PNG?raw=true" > </p>
 
 ### Worst
 
-<p align="center"> Output </p>
-
-<img align="center" src="https://github.com/joemar25/Files/blob/main/worst-out.PNG?raw=true" >
+<p align="center"> Output <br> <img align="center" src="https://github.com/joemar25/Files/blob/main/worst-out.PNG?raw=true" > </p>
 
 > Worst is solvable but will take a while - about (2 - 4) min to solve.
 
