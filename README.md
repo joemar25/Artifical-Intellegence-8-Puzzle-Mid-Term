@@ -47,7 +47,7 @@ This project is about showcasing how the two algorithms (IDS and A*) solve the 8
 
 <p align="center"> Output </p>
 
-<img src="https://github.com/joemar25/Files/blob/main/easy-out.png?raw=true" >
+<img src="https://github.com/joemar25/Files/blob/main/easy-out.PNG?raw=true" >
 
 ### Medium
 
