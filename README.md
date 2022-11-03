@@ -76,7 +76,8 @@ This project is about showcasing how the two algorithms (IDS and A*) solve the 8
 ```md
 MAIN()
     Terminologies...
-        - unsigned int var_name; -> only takes unsigned integer values (1, 2, 5, etc...) and not (-1, -3, 25, etc...)
+        - unsigned int var_name; -> only takes unsigned integer values (1, 2, 5, etc...)
+          and not (-1, -3, 25, etc...)
         - delete pointer; -> Delete operator deallocates memory from heap
 
     Algo.
@@ -211,13 +212,14 @@ void selectOption(unsigned int &input)
 }
 ```
 
-> note: this function will use printChoices() that will return a print statements for user to see while the program is in execution
+> note: This function will use printChoices() that will return a print statements for user to see while the program is in execution.
 
 <br>
 
 ```md
  Terminologies...
-        - var_type &var_name -> means no variable will be created. we will just only pass a reference of the original variable that will be passed in this function. 
+        - var_type &var_name -> means no variable will be created. we will just only pass a reference of
+        the original variable that will be passed in this function. 
 
 Is Option Valid(num)
     1. If num less than or equal to 0 or num greater than or equal 6, then return true else false
@@ -271,7 +273,7 @@ PUZZLE *initialState(unsigned int board[][ROW_COL])
 <br>
 
 ```md
-from Puzzle class we have a function that will display the current state of the puzzle
+From Puzzle class we have a function that will display the current state of the puzzle
 
 display() - is a constant, no values here can be modified
 
