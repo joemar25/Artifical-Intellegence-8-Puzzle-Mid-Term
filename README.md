@@ -1,4 +1,4 @@
-# ⭐️⭐️⭐️ **AI Mid Term Project** ⭐️⭐️⭐️
+<h1 align="center"> ⭐️⭐️⭐️ AI Mid Term Project** ⭐️⭐️⭐️<h1>
 
 This project is about showcasing how the two algorithms (IDS and A*) solve the 8 puzzle problem.
 
@@ -8,7 +8,7 @@ This project is about showcasing how the two algorithms (IDS and A*) solve the 8
 
 <br>
 
-![Logo](https://static.vecteezy.com/system/resources/previews/000/371/208/original/vector-welcome-hand-drawn-text.jpg)
+<p align="center"> <img align="center" src="https://sandipanweb.files.wordpress.com/2017/03/sol_a4.gif?w=676"> </p>
 
 ## Members
 
