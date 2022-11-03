@@ -107,7 +107,7 @@ MAIN()
            N. end clock
            M. calculate cpu time used for IDS*
            O. end clock
-        6. Dealocate Puzzle from memory
+        6. Dealocate Puzzle Pointer from memory
         7. End
 ```
 
@@ -151,7 +151,6 @@ int main(int argc, char **argv)
 
         init->display();
 
-        // A*
         start = clock();
         AStar_Search(init);
         end = clock();
@@ -160,7 +159,6 @@ int main(int argc, char **argv)
 
         cout << "\n\t=================================================================================\n";
 
-        // IDS
         start = clock();
         IDS_Search(init);
         end = clock();
@@ -178,7 +176,20 @@ int main(int argc, char **argv)
 }
 ```
 
-> Note: ...
+> Note: This main function will call other functions that will solve the 8 puzzle problem. Those board that had been configured will be used for determining which will be used as initial state of the puzzle.
+
+<br>
+
+```md
+SELECT OPTION (input)
+    1. Print Choices (*)
+    2. Create Label ASK
+    3. Loop while input is like +, -
+    4. End Loop
+    5. If input option is not valid
+       A. Goto 2
+    6. Else end
+```
 
 ```c++
 void selectOption(unsigned int &input)
@@ -200,6 +211,29 @@ void selectOption(unsigned int &input)
 }
 ```
 
+> note: this function will use printChoices() that will return a print statements for user to see while the program is in execution
+
+<br>
+
+```md
+ Terminologies...
+        - var_type &var_name -> means no variable will be created. we will just only pass a reference of the original variable that will be passed in this function. 
+
+Is Option Valid(num)
+    1. If num less than or equal to 0 or num greater than or equal 6, then return true else false
+```
+
+```c++
+bool isOptionValid(const int &num)
+{
+    return num <= 0 || num >= 6;
+}
+```
+
+> Note: This is use for determining if user input number is correct.
+
+<br>
+
 ```md
 state will create a new state that acceps array which contains tile arrangment
     - which also gets and set the state'puzzle blank tile
@@ -207,11 +241,17 @@ state will create a new state that acceps array which contains tile arrangment
     - set move
     - and set parent of the state
 
-@param board := array from the main function that gets -> (easy, medium, hard, worst, preferred)
-@return created state
-```
+parameter is board which is an array from the main function that gets -> (easy, medium, hard, worst, preferred)
+that will return created puzzle state
 
-> Note: ...
+
+intial state (board) - return initialized Puzzle
+    1. Set new Puzzle by giving it a board
+    2. Set initial Depth Level 0
+    3. Set initial move to Start
+    4. Set parent of this Puzzle to none
+    5. return this initialized puzzle state
+```
 
 ```c++
 PUZZLE *initialState(unsigned int board[][ROW_COL])
@@ -224,18 +264,59 @@ PUZZLE *initialState(unsigned int board[][ROW_COL])
 }
 ```
 
-```md
-state will create a new state that acceps array which contains tile arrangment
-    - which also gets and set the state'puzzle blank tile
-    - set the depth limit
-    - set move
-    - and set parent of the state
+> Note: This initial state function will return a (puzzle state) in which will be used for the algorithms (IDS and A*). See [Main()](#functions). As you will notice it will be currently be hold by (object pointer) Puzzle, that pointer will be passed to the algorithms.
 
-@param board := array from the main function that gets -> (easy, medium, hard, worst, preferred)
-@return created state
+<p align="center"> <img align="center" src="https://github.com/joemar25/Files/blob/main/ai-puzzle-drawing-main-logic-blue.png?raw=true" > </p>
+
+<br>
+
+```md
+from Puzzle class we have a function that will display the current state of the puzzle
+
+display() - is a constant, no values here can be modified
+
+this function is just for visualization of the puzzle state
 ```
 
-> Note: ...
+```c++
+PUZZLE () {
+    public:
+        void display() const
+        {
+            for (x = 0; x < row; x++)
+            {
+                cout << "\t                                                  ";
+                for (y = 0; y < col; y++)
+                    cout
+                        << "+---";
+                cout << "+\n";
+
+                cout << "\t                                                  ";
+                for (y = 0; y < col; y++)
+                {
+                    cout << "| ";
+                    if (this->board[x][y] == 0)
+                        cout << " ";
+                    else
+                        cout << this->board[x][y];
+                    cout << " ";
+                }
+                cout << "|\n";
+            }
+
+            cout << "\t                                                  ";
+            for (y = 0; y < col; y++)
+                cout << "+---";
+            cout << "+\n";
+            cout << "\t                                                  "
+                    << "   " << this->direction.move << "\n";
+        } 
+}
+```
+
+> note: This function will output states like this:  
+
+<p align="center"> <img align="center" src="https://github.com/joemar25/Files/blob/main/ai-8-puzzle-out-pattern.png?raw=true" > </p>
 
 <br>
 
