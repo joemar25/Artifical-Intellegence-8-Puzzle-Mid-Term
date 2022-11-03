@@ -27,7 +27,6 @@ clock_t start, end;
 
 // versatile global variable(puzzle)
 unsigned int counter, x, y, i, cost;
-const unsigned int goalState[][ROW_COL] = {{1, 2, 3}, {8, 0, 4}, {7, 6, 5}};
 
 /*** OBJECT tile, to keep track of a tile in PUZZLE ***/
 class TILE
@@ -72,6 +71,8 @@ public:
 /*** OBJECT puzzle ***/
 class PUZZLE
 {
+    // The Goal State
+    const unsigned int goalState[ROW_COL][ROW_COL] = {{1, 2, 3}, {8, 0, 4}, {7, 6, 5}};
 
     int *getLoc(int &_row, int &_col, const unsigned int board[][ROW_COL])
     {

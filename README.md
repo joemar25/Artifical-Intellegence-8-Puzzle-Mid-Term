@@ -498,7 +498,8 @@ Best State() {
     7. set temp list to lowheur
     8. if temp list next value is not null
        A. set temp list next state f() to dist
-       B. check if dist less than minimum - dist (misplaced distance or f() of the next node) - compare with current minimum f()
+       B. check if dist less than minimum - dist (misplaced distance or f() of the next node) 
+          - compare with current minimum f()
             a. let previous hold templist
             b. lowheur set to temp list next
             c. set dist to minimum
@@ -507,7 +508,8 @@ Best State() {
     9. set lowheur state to best
     10. if node is not equal to none
         A. check if lowheur is equal to node, then return front
-        B. check if lowheur next is null, then set previous next to null, else previous next set to lowheur next 
+        B. check if lowheur next is null, then set previous next to null, else previous next 
+           set to lowheur next 
     11. free lowheur
     12. return best state from the list
 }
@@ -572,6 +574,280 @@ class NODE {
 <br>
 
 ```md
+h gives how far the goal node is and g the number of nodes traversed from the
+  start node to the current node.
+For h, we will use the Manhattan distance, and for g, we will use the depth
+  of the current node.
+
+f() - get the total cost, that will be used to select which move to pick as best state in bestState()
+    1. Initialize 0, row difference = 0, column difference 0
+    2. Set a pointer to null, this will hold an array value
+    3. initialize i = 0
+    4. If i < row
+        A. initialize j = 0
+        B. if j < col
+            a. if board index [i][j] is equal to 0
+               a.1. set location array to get location of current board
+               a.2. calculate row difference
+               a.3. calculate col difference
+               a.4. add total (row diff + col diff) as heur
+               a.5. goto 4.B.
+    5. free pointer
+    6. return depth level + manhattan distance -> g(x) + h(x)
+```
+
+```c++
+class PUZZLE {
+
+    private:
+        int *getLoc(int &_row, int &_col, const unsigned int board[][ROW_COL])
+        {
+            static int location[2];
+            for (x = 0; x < row; x++)
+            {
+                for (y = 0; y < col; y++)
+                {
+                    if (board[x][y] == goalState[_row][_col])
+                    {
+                        location[0] = x;
+                        location[1] = y;
+                    }
+                }
+            }
+            return location;
+        }
+
+    public:
+        int f()
+        {
+            int heur = 0, row_diff = 0, col_diff = 0;
+            int *location = nullptr;
+
+            for (int i = 0; i < row; i++)
+            {
+                for (int j = 0; j < col; j++)
+                {
+                    if (goalState[i][j] != 0)
+                    {
+                        location = getLoc(i, j, this->board);
+                        row_diff = (i > location[0]) ? i - location[0] : location[0] - i;
+                        col_diff = (j > location[1]) ? j - location[1] : location[1] - j;
+                        heur += col_diff + row_diff;
+                    }
+                }
+            }
+
+            location = nullptr;
+            delete location;
+            location = nullptr;
+
+            // g(x) + h(n) 
+            return this->depth + heur;
+        }
+}
+```
+
+> Note: This function return an integer which is used in bestState() function, mainly in condition
+        on determining which is the best state on open list
+
+<br>
+
+```md
+front()
+    1. create a tempnode Puzzle
+    2. if node != null
+        A. set node state to the tempnode
+        B. create temp State and set to the node
+        .
+        .
+        .
+        .
+        .
+        
+```
+
+```c++
+class NODE {
+    public:
+        PUZZLE *front()
+        {
+            PUZZLE *tempNode = nullptr;
+            if (node != nullptr)
+            {
+                tempNode = node->state;
+                STATE *temp = node;
+                node = node->next;
+                delete temp;
+            }
+            return tempNode;
+        }
+}
+```
+
+> Note: This function gives use access to the node (state) in the beginning of the list.
+
+<br>
+
+```md
+```
+
+```c++
+class PUZZLE {
+    public:
+        bool isGoal() const
+        {
+            for (x = 0; x < row; x++)
+            {
+                for (y = 0; y < col; y++)
+                {
+                    if (board[x][y] != goalState[x][y])
+                        return false;
+                }
+            }
+            return true;
+        }
+} 
+```
+
+> Note:
+
+<br>
+
+```md
+```
+
+```c++
+class PUZZLE {
+    public:
+        int getCost()
+        {
+            cost = 0;
+            while (this->parent != nullptr)
+            {
+                cost++;
+                this->parent = this->parent->parent;
+            }
+            return cost;
+        }
+}
+```
+
+> Note: This function will be used to get total cost for expansion
+
+<br>
+
+```md
+
+@brief check if move is possible
+
+@param state
+@param direction
+@return true/false
+
+```
+
+```c++
+class PUZZLE {
+    public:
+        bool canMoveUp() const
+        {
+            if (this->blank.X > 0)
+                return true;
+            return false;
+        }
+
+        bool canMoveLeft() const
+        {
+            if (this->blank.Y > 0)
+                return true;
+            return false;
+        }
+
+        bool canMoveDown() const
+        {
+            if (this->blank.X < ROW_COL - 1)
+                return true;
+            return false;
+        }
+
+        bool canMoveRight() const
+        {
+            if (this->blank.Y < ROW_COL - 1)
+                return true;
+            return false;
+        }
+}
+```
+
+> Note:
+
+<br>
+
+```md
+```
+
+```c++
+class PUZZLE {
+    public: 
+        PUZZLE *moveUp()
+        {
+            PUZZLE *temp = new PUZZLE(this->board);
+            temp->parent = this;
+            temp->depth = this->depth + 1;
+
+            temp->direction.move = "Up";
+            temp->board[temp->blank.X][temp->blank.Y] = temp->board[temp->blank.X - 1][temp->blank.Y];
+            temp->blank.X--;
+            temp->board[temp->blank.X][temp->blank.Y] = 0;
+            return temp;
+        }
+
+        PUZZLE *moveLeft()
+        {
+            PUZZLE *temp = new PUZZLE(this->board);
+            temp->parent = this;
+            temp->depth = this->depth + 1;
+
+            temp->direction.move = "Left";
+            temp->board[temp->blank.X][temp->blank.Y] = temp->board[temp->blank.X][temp->blank.Y - 1];
+            temp->blank.Y--;
+            temp->board[temp->blank.X][temp->blank.Y] = 0;
+            return temp;
+        }
+
+        PUZZLE *moveDown()
+        {
+            PUZZLE *temp = new PUZZLE(this->board);
+            temp->parent = this;
+            temp->depth = this->depth + 1;
+
+            temp->direction.move = "Down";
+            temp->board[temp->blank.X][temp->blank.Y] = temp->board[temp->blank.X + 1][temp->blank.Y];
+            temp->blank.X++;
+            temp->board[temp->blank.X][temp->blank.Y] = 0;
+            return temp;
+        }
+
+        PUZZLE *moveRight()
+        {
+            PUZZLE *temp = new PUZZLE(this->board);
+            temp->parent = this;
+            temp->depth = this->depth + 1;
+
+            temp->direction.move = "Right";
+            temp->board[temp->blank.X][temp->blank.Y] = temp->board[temp->blank.X][temp->blank.Y + 1];
+            temp->blank.Y++;
+            temp->board[temp->blank.X][temp->blank.Y] = 0;
+            return temp;
+        }
+}
+```
+
+> Note:
+
+<br>
+
+```md
 ```
 
 ```c++
@@ -622,3 +898,5 @@ class NODE {
 <br>
 
 ## References
+
+- <https://faramira.com/solving-8-puzzle-problem-using-a-star-search/>
