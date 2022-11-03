@@ -426,7 +426,162 @@ void AStar_Search(PUZZLE *state)
 <br>
 
 ```md
+node = null -> this is an attribute for initializing an empty list of states
 
+Insert (puzzle)
+    1. Create an empty State as tempNode
+    2. Set tempNode state to puzzle (*)
+    3. Set tempNode next to none (null)
+    4. If node is not null
+        A. set node -> temp node next
+    5. Set temp node -> node
+```
+
+```c++
+class NODE {
+    public: 
+        STATE *node = nullptr;
+
+        void insert(PUZZLE *puzzle)
+        {
+            STATE *tempNode = new STATE;
+            tempNode->state = puzzle;
+            tempNode->next = nullptr;
+            if (node != nullptr)
+                tempNode->next = node;
+            node = tempNode;
+        }
+};
+```
+
+> Note: This will use other class called State, that will use as a note list for checking later.
+
+<br>
+
+```md
+This is a blueprint of STATE, used in void insert(PUZZLE *puzzle){}
+
+This Object blueprint is also composed of a constructor and a deconstructor. 
+```
+
+```c++
+class STATE
+{
+    public:
+        PUZZLE *state;
+        STATE *next;
+
+        STATE(){};
+        ~STATE(){};
+};
+```
+
+> Note: This class is all about helping us create a linked-list of states.
+
+<br>
+
+```md
+
+node = null
+
+Best State() {
+    1. initialize minimum value to 0
+    2. set State templist to node / supposed temp node 
+    3. set previous, lowheur to none
+    4. set best Puzzle to none
+    5. if node next value is none
+        A. set next state to best
+        B. delete node values
+        C. set node to none
+        D. return best puzzle state
+    6. get f() of current temp state and set is to minimum
+    7. set temp list to lowheur
+    8. if temp list next value is not null
+       A. set temp list next state f() to dist
+       B. check if dist less than minimum - dist (misplaced distance or f() of the next node) - compare with current minimum f()
+            a. let previous hold templist
+            b. lowheur set to temp list next
+            c. set dist to minimum
+        C. temp list is set to temp list next
+       Goto 8
+    9. set lowheur state to best
+    10. if node is not equal to none
+        A. check if lowheur is equal to node, then return front
+        B. check if lowheur next is null, then set previous next to null, else previous next set to lowheur next 
+    11. free lowheur
+    12. return best state from the list
+}
+```
+
+```c++
+class NODE {
+    public:
+        STATE *node = nullptr;
+
+        PUZZLE *bestState()
+        {
+            int minimum = 0;
+            STATE *temp = node;
+            STATE *previous = nullptr;
+            STATE *lowheur = nullptr;
+            PUZZLE *best = nullptr;
+
+            if (node->next == nullptr)
+            {
+                best = node->state;
+                delete node;
+                node = nullptr;
+                return best;
+            }
+
+            minimum = temp->state->f();
+            lowheur = temp;
+
+            while (temp->next != nullptr)
+            {
+                int f = temp->next->state->f();
+                if (f < minimum)
+                {
+                    previous = temp;
+                    lowheur = temp->next;
+                    minimum = f;
+                }
+                temp = temp->next;
+            }
+
+            best = lowheur->state;
+
+            if (node != nullptr)
+            {
+                if (lowheur == node)
+                    return front();
+                if (lowheur->next == nullptr)
+                    previous->next = nullptr;
+                else
+                    previous->next = lowheur->next;
+            }
+
+            delete lowheur;
+            return best;
+        }
+};
+```
+
+> Note: This function is used to get the best state, used in A* Search Algorithm.
+
+<br>
+
+```md
+```
+
+```c++
+```
+
+> Note:
+
+<br>
+
+```md
 ```
 
 ```c++

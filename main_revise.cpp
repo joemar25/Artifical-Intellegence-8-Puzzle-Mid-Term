@@ -362,7 +362,7 @@ public:
     PUZZLE *bestState()
     {
         int minimum = 0;
-        STATE *templist = node;
+        STATE *temp = node;
         STATE *previous = nullptr;
         STATE *lowheur = nullptr;
         PUZZLE *best = nullptr;
@@ -375,19 +375,19 @@ public:
             return best;
         }
 
-        minimum = templist->state->f();
-        lowheur = templist;
+        minimum = temp->state->f();
+        lowheur = temp;
 
-        while (templist->next != nullptr)
+        while (temp->next != nullptr)
         {
-            int dist = templist->next->state->f();
-            if (dist < minimum)
+            int f = temp->next->state->f();
+            if (f < minimum)
             {
-                previous = templist;
-                lowheur = templist->next;
-                minimum = dist;
+                previous = temp;
+                lowheur = temp->next;
+                minimum = f;
             }
-            templist = templist->next;
+            temp = temp->next;
         }
 
         best = lowheur->state;
@@ -411,7 +411,7 @@ public:
      */
     void insert(PUZZLE *puzzle)
     {
-        STATE *tempNode = new (STATE);
+        STATE *tempNode = new STATE;
         tempNode->state = puzzle;
         tempNode->next = nullptr;
         if (node != nullptr)
