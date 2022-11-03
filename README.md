@@ -322,6 +322,130 @@ PUZZLE () {
 
 <br>
 
+```md
+Module (Lecture 5, Page 32) A* Algorithm
+    1. Put the start node s on a list called OPEN and compute f(s).
+    2. If OPEN is empty, exit with failure; otherwise continue.
+    3. Remove from OPEN that node whose f value is smallest and put it on a list called 
+    CLOSED. Call this node n. (Resolve ties for minimal f values arbitrarily, but always 
+    in favor of any goal node.)
+    4. If n is a goal node, exit with the solution path obtained by tracing back the pointers; 
+    otherwise continue.
+    5. Expand node n, generating all its successors. If there are no successors, go 
+    immediately to 2. For each successsor ni, compute f(ni).
+    6. Associate with the successors not already on either OPEN or CLOSED the f values 
+    just computed. Put these nodes on OPEN and direct pointers from them back to n.
+    7. Associate with those successors that were already on OPEN or CLOSED the smaller 
+    of the f values just computed and their previous f values. Put on OPEN those 
+    successors on CLOSED whose f values were thus lowered, and redirect to n the 
+    pointers from all nodes whose f values were lowered.
+    8. Go to 2.
+
+nuestra propia versión (program's version)
+
+AStar Search(initial state)
+    1. Start
+    2. Set counter to 0, for number of expanded node
+    3. Insert the initial state to open list
+    4. if open list is not empty
+        A. get best state from open list and remove state from open list (*)
+        B. insert the best state to the closed list
+        C. if best state is goal
+            a. Display result with expanded node
+            b. Go to 5
+        E. if best state can move up, check if it is already existing on closed list (*)
+            a. if true, then insert move up (*) to open list, else continue
+        F. if best state can move left, check if it is already existing on closed list (*)
+            a. if true, then insert move left (*) to open list, else continue
+        G. if best state can move down, check if it is already existing on closed list (*)
+            a. if true, then insert move down (*) to open list, else continue
+        H. if best state can move right, check if it is already existing on closed list (*)
+            a. if true, then insert move right (*) to open list, else continue
+        I. increment counter by 1
+        J. Go to 4
+    5. End
+```
+
+```c++
+void AStar_Search(PUZZLE *state)
+{
+    counter = 0;
+
+    NODE openList, closedList;
+
+    openList.insert(state);
+
+    while (openList.node != nullptr)
+    {
+        PUZZLE *puzzle = openList.bestState();
+        closedList.insert(puzzle);
+
+        if (puzzle->isGoal())
+        {
+            cout << "\tGenerating A* Path...\n\n";
+            displayPath(puzzle);
+            cout << "\n\t Agent is using A*...";
+            cout << "\n\t Solution Path: ";
+            solutionPath(puzzle);
+            cout << "\n\t Solution Cost  = " << puzzle->getCost();
+            cout << "\n\t Expanded Nodes = " << counter;
+            return;
+        }
+
+        if (puzzle->canMoveUp())
+        {
+            if (closedList.isListed(puzzle->moveUp()))
+                openList.insert(puzzle->moveUp());
+        }
+
+        if (puzzle->canMoveLeft())
+        {
+            if (closedList.isListed(puzzle->moveLeft()))
+                openList.insert(puzzle->moveLeft());
+        }
+
+        if (puzzle->canMoveDown())
+        {
+            if (closedList.isListed(puzzle->moveDown()))
+                openList.insert(puzzle->moveDown());
+        }
+
+        if (puzzle->canMoveRight())
+        {
+            if (closedList.isListed(puzzle->moveRight()))
+                openList.insert(puzzle->moveRight());
+        }
+
+        counter++;
+    }
+}
+```
+
+> Note: This function is composed of helper functions that will help to solve 8 puzzle problem using A*.
+
+<br>
+
+```md
+
+```
+
+```c++
+```
+
+> Note:
+
+<br>
+
+```md
+```
+
+```c++
+```
+
+> Note:
+
+<br>
+
 ---
 
 <br>

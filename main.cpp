@@ -341,7 +341,8 @@ public:
 class NODE
 {
 public:
-    STATE *node = nullptr; // an attribute for initializing an empty list of states
+    // an attribute for initializing an empty list of states
+    STATE *node = nullptr;
 
     PUZZLE *front()
     {
