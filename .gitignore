@@ -1,6 +1,8 @@
 /.vscode
 /includes
-*.exe
-*.class
-*.java
+/my_implementation_in_python
 *.c
+*.py
+*.exe
+*.java
+*.class

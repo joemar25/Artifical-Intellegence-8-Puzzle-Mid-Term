@@ -74,6 +74,41 @@ This project is about showcasing how the two algorithms (IDS and A*) solve the 8
 ## Functions
 
 ```md
+This is the head area of the program.
+We only use iostream (input output stream)
+And use ctime which is equivalent to time.h in C, for calculating
+runtime of algorithm.
+
+We have ROW_COL 3 for (3x3) puzzle
+and row 3 and col 3 for the loop
+
+We also declare here other important variables that will be used thoughout
+the program.
+```
+
+```c++
+
+#include <iostream>
+#include <ctime>
+
+using std::cin;
+using std::cout;
+using std::string;
+
+#define ROW_COL 3
+
+const unsigned int row = 3, col = 3;
+
+double cpuTimeUsed;
+clock_t start, end;
+
+unsigned int counter, x, y, i, cost;
+
+```
+
+> Note: Variable here are used in most of the functions in this program.
+
+```md
 MAIN()
     Terminologies...
         - unsigned int var_name; -> only takes unsigned integer values (1, 2, 5, etc...)
@@ -706,7 +741,7 @@ class PUZZLE {
             }
             return true;
         }
-} 
+}
 ```
 
 > Note:
@@ -851,6 +886,16 @@ class PUZZLE {
 ```
 
 ```c++
+void displayPath(PUZZLE *node)
+{
+    if (node == nullptr)
+        return;
+    if (node->direction.move[0] != 'S')
+    {
+        displayPath(node->parent);
+        node->display();
+    }
+}
 ```
 
 > Note:
@@ -861,6 +906,19 @@ class PUZZLE {
 ```
 
 ```c++
+void solutionPath(PUZZLE *node)
+{
+    // If we hit the end of list, we return from there. End of recursion.
+    if (node == nullptr)
+        return;
+    if (node->direction.move[0] != 'S')
+    {
+        // Move one node forward towards the end of list.
+        solutionPath(node->parent);
+        // While coming back from the end of list, start printing the node values. Last node will be first one in recursive open.
+        std::cout << node->direction.move[0] << " ";
+    }
+}
 ```
 
 > Note:
@@ -871,6 +929,64 @@ class PUZZLE {
 ```
 
 ```c++
+void IDS_Search(PUZZLE *initialState)
+{
+    cout << "\n\t Agent is using IDS...";
+    i = 0, counter = 0;
+
+    while (true)
+    {
+        NODE closed, open;
+
+        open.insert(initialState);
+        while (open.node != nullptr)
+        {
+            PUZZLE *puzzle = open.front();
+
+            if (puzzle->depth > i)
+                continue;
+
+            closed.insert(puzzle);
+
+            if (puzzle->isGoal())
+            {
+                cout << "\n\t Solution Path: ";
+                solutionPath(puzzle);
+                cout << "\n\t Solution Cost  = " << puzzle->getCost();
+                cout << "\n\t Expanded Nodes = " << counter;
+                return;
+            }
+
+            counter++;
+
+            if (puzzle->canMoveUp())
+            {
+                if (closed.isListed(puzzle->moveUp()))
+                    open.insert(puzzle->moveUp());
+            }
+
+            if (puzzle->canMoveLeft())
+            {
+                if (closed.isListed(puzzle->moveLeft()))
+                    open.insert(puzzle->moveLeft());
+            }
+
+            if (puzzle->canMoveDown())
+            {
+                if (closed.isListed(puzzle->moveDown()))
+                    open.insert(puzzle->moveDown());
+            }
+
+            if (puzzle->canMoveRight())
+            {
+                if (closed.isListed(puzzle->moveRight()))
+                    open.insert(puzzle->moveRight());
+            }
+        }
+
+        i++;
+    }
+}
 ```
 
 > Note:
