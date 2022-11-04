@@ -724,6 +724,19 @@ class NODE {
 <br>
 
 ```md
+Is Goal ()
+    1. Start 
+    2. initialize x as 0
+    3. if x is less than row, if false Goto 6
+       A. initialize y as 0
+       B. if y is less than col
+          B.1. if board index is not equal to goal state index, return false
+       C. increment y
+       D. Goto 3.A.
+    4. incremrnt x
+    5. Goto 3
+    6. Return true
+    7. End.
 ```
 
 ```c++
@@ -744,7 +757,7 @@ class PUZZLE {
 }
 ```
 
-> Note:
+> Note: This function is used for determining if the current Puzzle state is the Goal state. Used in both Algorithm (IDS and A*)
 
 <br>
 
