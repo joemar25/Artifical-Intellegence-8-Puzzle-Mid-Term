@@ -786,11 +786,10 @@ class PUZZLE {
 
 ```md
 
-@brief check if move is possible
+This functions is for checking if the Puzzle (blank tile) possilble moves 
 
-@param state
-@param direction
-@return true/false
+This is a constant function, since we are not going to modify anything
+but rather return true/false depending on the result
 
 ```
 
@@ -827,11 +826,14 @@ class PUZZLE {
 }
 ```
 
-> Note:
+> Note: Used in both algorithms.
 
 <br>
 
 ```md
+
+Move the Puzzle (blank tile). 
+
 ```
 
 ```c++
@@ -891,7 +893,7 @@ class PUZZLE {
 }
 ```
 
-> Note:
+> Note: This is used before checking if the Puzzle (tile) can move on a specific area which is used in two Algorithms.
 
 <br>
 
