@@ -12,18 +12,17 @@ This project is about showcasing how the IDS and A* Algorithms solve the 8-puzzl
 
 ## Members
 
-- [Arrlee Balagtas](https://github.com/M0isT12 "Arrlee Balagtas") ✌🏻
+- [Arrlee Balagtas](https://github.com/M0isT12 "Arrlee's Github") ✌🏻
 - [Joemar Cardiño](https://github.com/joemar25 "Joemar's Github") 👋🏻
-- [Olan Gomez](https://github.com/Olan-G "Olan Gomez") 🤙🏻
+- [Olan Gomez](https://github.com/Olan-G "Olan's Github") 🤙🏻
 
 ## Tables of Contents
 
 1. [Actual Test Run](#test-run)
 2. [What are the Problems we encountered?](#problems-encountered)
 3. [Functions](#functions)
-4. [Solving Algorithms](#solving-algorithms)
-5. [Analysis](#analysis)
-6. [References Used](#references)
+4. [Analysis](#analysis)
+5. [References Used](#references)
 
 <br>
 
@@ -772,6 +771,15 @@ class PUZZLE {
 <br>
 
 ```txt
+Get Cost()
+    1. Start
+    2. Set Cost to 0
+    3. If puzzle parent is not Null
+        A. iterate cost by 1
+        B. set puzzle parent to the other puzzle parent
+        C. Goto 2 else Goto 3
+    4. return cost
+    5. End.
 ```
 
 ```c++
@@ -790,16 +798,183 @@ class PUZZLE {
 }
 ```
 
-> Note: This function will be used to get total cost for expansion
+> Note: This function will be used to get total cost for expansion.
 
 <br>
 
 ```txt
-
-This functions is for checking if the Puzzle (blank tile) possilble moves 
+This functions is for checking if the Puzzle (blank tile) possilble moves.
 
 This is a constant function, since we are not going to modify anything
-but rather return true/false depending on the result
+but rather return true/false depending on the result.
+
+Can Move Up()
+    1. Start
+    2. check puzzle blank x if greater than 0
+        A. Return true
+    3. Return false
+    4. End.
+
+    explanation...
+        [0,0], [0,1], [0,2]
+        [1,0], [1,1], [1,2]
+        [2,0], [2,1], [2,2]
+
+    -----------------------------------------------------------
+    
+    for example: blank x is 1
+        
+        blank.x > 0 returns true
+
+        old -> [1,0], [1,1], [1,2]
+        old -> [2,0], [2,1], [2,2]
+        .        .      .      .
+        .        .      .      .
+
+        since x will be decrement by 1 if blank will go up
+
+        .        .      .      .
+        .        .      .      .
+        new -> [0,0], [0,1], [0,2]
+        new -> [1,0], [1,1], [1,2]
+
+        this indexes can go upwards
+        
+    -----------------------------------------------------------
+
+        for example: blank x is 0
+        - blank.x > 0 returns False
+        - since blank x is 0 it cannot be decrement by 1,
+          which will result to a negative value
+
+    -----------------------------------------------------------
+
+Can Move Left()
+    1. Start
+    2. check puzzle blank y if greater than 0
+        A. Return true
+    3. Return false
+    4. End.
+
+    explanation...
+        [0,0], [0,1], [0,2]
+        [1,0], [1,1], [1,2]
+        [2,0], [2,1], [2,2]
+
+    -----------------------------------------------------------
+    
+    for example: blank y is 1
+        
+        blank.y > 0 returns true
+
+        old -> [0,1], [0,2]
+        old -> [1,1], [1,2]
+        old -> [2,1], [2,2]
+        .        .      .
+        .        .      .
+
+        since x will be decrement by 1 if blank will go up
+
+        .        .      .
+        .        .      .
+        new -> [0,0], [0,1]
+        new -> [1,0], [1,1]
+        new -> [2,0], [2,1]
+
+        this indexes can go left
+
+    -----------------------------------------------------------
+    
+    for example: blank y is 0
+        - blank.y > 0 returns False
+        - since blank y is 0 it cannot be decrement by 1,
+          which will result to a negative value
+
+    -----------------------------------------------------------
+
+Can Move Down()
+    1. Start
+    2. check puzzle blank x if less than 2
+        A. Return true
+    3. Return false
+    4. End.
+
+    explanation...
+        [0,0], [0,1], [0,2]
+        [1,0], [1,1], [1,2]
+        [2,0], [2,1], [2,2]
+
+    -----------------------------------------------------------
+    
+    for example: blank x is 1
+        
+        blank.x > 0 returns true
+
+        old -> [0,0], [0,1], [0,2]
+        old -> [1,0], [1,1], [1,2]
+        .        .      .      .
+        .        .      .      .
+
+        since x will be increment by 1 if blank will go up
+
+        .        .      .      .
+        .        .      .      .
+        new -> [1,0], [1,1], [1,2]
+        new -> [2,0], [2,1], [2,2]
+
+        this indexes can go downwards
+        
+    -----------------------------------------------------------
+
+        for example: blank x is 2
+        - blank.x < 2 returns False
+        - since blank x is 2 it cannot be increment by 1,
+          which will result to a out of bounce
+
+    -----------------------------------------------------------
+
+Can Move Right()
+    1. Start
+    2. check puzzle blank y if less than 2
+        A. Return true
+    3. Return false
+    4. End.
+
+    explanation...
+        [0,0], [0,1], [0,2]
+        [1,0], [1,1], [1,2]
+        [2,0], [2,1], [2,2]
+
+    -----------------------------------------------------------
+    
+    for example: blank y is 1
+        
+        blank.y > 0 returns true
+
+        old -> [0,0], [0,1]
+        old -> [1,0], [1,1]
+        old -> [2,0], [2,1]
+        .        .      .
+        .        .      .
+
+        since x will be increment by 1 if blank will go up
+
+        .        .      .
+        .        .      .
+        new -> [0,1], [0,2]
+        new -> [1,1], [1,2]
+        new -> [2,1], [2,2]
+
+        this indexes can go right
+
+    -----------------------------------------------------------
+    
+    for example: blank y is 2
+        - blank.y < 2 returns False
+        - since blank y is 2 it cannot be increment by 1,
+          which will result to a out of bounce
+
+    -----------------------------------------------------------
 
 ```
 
@@ -842,7 +1017,8 @@ class PUZZLE {
 
 ```txt
 
-Move the Puzzle (blank tile). 
+Move the Puzzle (blank tile). Depending on the statement in (A* and IDS), the function
+here will return a state in which the puzzle tile is moved on a specific area of the board.
 
 ```
 
@@ -1015,14 +1191,6 @@ void IDS_Search(PUZZLE *initialState)
 ```
 
 > Note:
-
-<br>
-
----
-
-<br>
-
-## Solving Algorithms
 
 <br>
 
