@@ -1,4 +1,4 @@
-<h1 align="center"> ⭐️⭐️⭐️ AI Midterm Project** ⭐️⭐️⭐️<h1>
+<h1 align="center"> ⭐️⭐️⭐️ AI Midterm Project ⭐️⭐️⭐️<h1>
 
 This project is about showcasing how the IDS and A* Algorithms solve the 8-puzzle problem.
 
