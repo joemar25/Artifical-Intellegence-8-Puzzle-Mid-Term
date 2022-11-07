@@ -1,6 +1,6 @@
-<h1 align="center"> ⭐️⭐️⭐️ AI Mid Term Project** ⭐️⭐️⭐️<h1>
+<h1 align="center"> ⭐️⭐️⭐️ AI Midterm Project** ⭐️⭐️⭐️<h1>
 
-This project is about showcasing how the two algorithms (IDS and A*) solve the 8 puzzle problem.
+This project is about showcasing how the IDS and A* Algorithms solve the 8-puzzle problem.
 
 <br>
 
@@ -19,7 +19,7 @@ This project is about showcasing how the two algorithms (IDS and A*) solve the 8
 ## Tables of Contents
 
 1. [Actual Test Run](#test-run)
-2. [What are the Problems we encountered?](#problems-encuntered)
+2. [What are the Problems we encountered?](#problems-encountered)
 3. [Functions](#functions)
 4. [Solving Algorithms](#solving-algorithms)
 5. [Analysis](#analysis)
@@ -55,7 +55,7 @@ This project is about showcasing how the two algorithms (IDS and A*) solve the 8
 
 <p align="center"> Output <br> <img align="center" src="https://github.com/joemar25/Files/blob/main/worst-out.PNG?raw=true" > </p>
 
-> Worst is solvable but will take a while - about (2 - 4) min to solve.
+> Worst is solvable but it will take about 2 to 4 minutes to solve.
 
 <br>
 
@@ -63,8 +63,18 @@ This project is about showcasing how the two algorithms (IDS and A*) solve the 8
 
 <br>
 
-## Problems Encuntered
+## Problems Encountered
 
+```txt
+The developers first tried to develop the 8-puzzle using a 1-dimensional array, but they decided
+to make it using a 2-dimensional array instead because it uses a less complicated algorithm. 
+
+The developers also encountered a problem in solving more complicated problems. The more complicated
+problems took a longer time to solve and the developer would not know if the program is still running
+or still solving the problem. But the worst maximum time the developers encountered while running
+the program was around 10 minutes. 
+```
+    
 <br>
 
 ---
