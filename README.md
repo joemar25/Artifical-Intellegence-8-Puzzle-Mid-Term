@@ -74,7 +74,7 @@ problems took a longer time to solve and the developer would not know if the pro
 or still solving the problem. But the worst maximum time the developers encountered while running
 the program was around 10 minutes. 
 ```
-    
+
 <br>
 
 ---
@@ -83,7 +83,7 @@ the program was around 10 minutes.
 
 ## Functions
 
-```md
+```txt
 This is the head area of the program.
 We only use iostream (input output stream)
 And use ctime which is equivalent to time.h in C, for calculating
@@ -118,7 +118,7 @@ unsigned int counter, x, y, i, cost;
 
 > Note: Variable here are used in most of the functions in this program.
 
-```md
+```txt
 MAIN()
     Terminologies...
         - unsigned int var_name; -> only takes unsigned integer values (1, 2, 5, etc...)
@@ -226,7 +226,7 @@ int main(int argc, char **argv)
 
 <br>
 
-```md
+```txt
 SELECT OPTION (input)
     1. Print Choices (*)
     2. Create Label ASK
@@ -261,7 +261,7 @@ void selectOption(unsigned int &input)
 
 <br>
 
-```md
+```txt
  Terminologies...
         - var_type &var_name -> means no variable will be created. we will just only pass a reference of
         the original variable that will be passed in this function. 
@@ -281,7 +281,7 @@ bool isOptionValid(const int &num)
 
 <br>
 
-```md
+```txt
 state will create a new state that acceps array which contains tile arrangment
     - which also gets and set the state'puzzle blank tile
     - set the depth limit
@@ -317,7 +317,7 @@ PUZZLE *initialState(unsigned int board[][ROW_COL])
 
 <br>
 
-```md
+```txt
 From Puzzle class we have a function that will display the current state of the puzzle
 
 display() - is a constant, no values here can be modified
@@ -367,7 +367,7 @@ PUZZLE () {
 
 <br>
 
-```md
+```txt
 Module (Lecture 5, Page 32) A* Algorithm
     1. Put the start node s on a list called OPEN and compute f(s).
     2. If OPEN is empty, exit with failure; otherwise continue.
@@ -470,7 +470,7 @@ void AStar_Search(PUZZLE *state)
 
 <br>
 
-```md
+```txt
 node = null -> this is an attribute for initializing an empty list of states
 
 Insert (puzzle)
@@ -503,7 +503,7 @@ class NODE {
 
 <br>
 
-```md
+```txt
 This is a blueprint of STATE, used in void insert(PUZZLE *puzzle){}
 
 This Object blueprint is also composed of a constructor and a deconstructor. 
@@ -525,7 +525,7 @@ class STATE
 
 <br>
 
-```md
+```txt
 
 node = null
 
@@ -539,7 +539,7 @@ Best State() {
         B. delete node values
         C. set node to none
         D. return best puzzle state
-    6. get f() of current temp state and set is to minimum
+    6. get f() of current temp state and set is to minimum - based in module 5, page 44
     7. set temp list to lowheur
     8. if temp list next value is not null
        A. set temp list next state f() to dist
@@ -618,8 +618,8 @@ class NODE {
 
 <br>
 
-```md
-h gives how far the goal node is and g the number of nodes traversed from the
+```txt
+h gives how far the goal node is and g the number of nodes traversed from the  
   start node to the current node.
 For h, we will use the Manhattan distance, and for g, we will use the depth
   of the current node.
@@ -697,7 +697,7 @@ class PUZZLE {
 
 <br>
 
-```md
+```txt
 front()
     1. create a tempnode Puzzle
     2. if node != null
@@ -733,7 +733,7 @@ class NODE {
 
 <br>
 
-```md
+```txt
 Is Goal ()
     1. Start 
     2. initialize x as 0
@@ -771,7 +771,7 @@ class PUZZLE {
 
 <br>
 
-```md
+```txt
 ```
 
 ```c++
@@ -794,7 +794,7 @@ class PUZZLE {
 
 <br>
 
-```md
+```txt
 
 This functions is for checking if the Puzzle (blank tile) possilble moves 
 
@@ -840,7 +840,7 @@ class PUZZLE {
 
 <br>
 
-```md
+```txt
 
 Move the Puzzle (blank tile). 
 
@@ -907,7 +907,7 @@ class PUZZLE {
 
 <br>
 
-```md
+```txt
 ```
 
 ```c++
@@ -927,7 +927,7 @@ void displayPath(PUZZLE *node)
 
 <br>
 
-```md
+```txt
 ```
 
 ```c++
@@ -950,7 +950,7 @@ void solutionPath(PUZZLE *node)
 
 <br>
 
-```md
+```txt
 ```
 
 ```c++

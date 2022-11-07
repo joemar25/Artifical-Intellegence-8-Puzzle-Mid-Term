@@ -199,7 +199,7 @@ public:
         location = nullptr;
         delete location;
         location = nullptr;
-        // g(x) + h(n)
+        // g(x) + h(x)
         return this->depth + heur;
     }
 

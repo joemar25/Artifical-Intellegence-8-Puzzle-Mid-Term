@@ -179,7 +179,7 @@ public:
 
     int f()
     {
-        int heur = 0, row_diff = 0, col_diff = 0;
+        int miss = 0, row_diff = 0, col_diff = 0;
         int *location = nullptr;
 
         for (int i = 0; i < row; i++)
@@ -191,7 +191,7 @@ public:
                     location = getLoc(i, j, this->board);
                     row_diff = (i > location[0]) ? i - location[0] : location[0] - i;
                     col_diff = (j > location[1]) ? j - location[1] : location[1] - j;
-                    heur += col_diff + row_diff;
+                    miss += col_diff + row_diff;
                 }
             }
         }
@@ -200,7 +200,7 @@ public:
         delete location;
         location = nullptr;
         // g(x) + h(n)
-        return this->depth + heur;
+        return this->depth + miss;
     }
 
     /**
