@@ -12,9 +12,9 @@ This project is about showcasing how the two algorithms (IDS and A*) solve the 8
 
 ## Members
 
-- [Arrlee Balagtas](https://www.facebook.com/100004747590876/ "Arrlee Balagtas") ✌🏻
+- [Arrlee Balagtas](https://github.com/M0isT12 "Arrlee Balagtas") ✌🏻
 - [Joemar Cardiño](https://github.com/joemar25 "Joemar's Github") 👋🏻
-- [Olan Gomez](https://github.com/AdrianJones23 "Olan Gomez") 🤙🏻
+- [Olan Gomez](https://github.com/Olan-G "Olan Gomez") 🤙🏻
 
 ## Tables of Contents
 
