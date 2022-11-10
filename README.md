@@ -1086,6 +1086,7 @@ class PUZZLE {
 <br>
 
 ```txt
+display
 ```
 
 ```c++
