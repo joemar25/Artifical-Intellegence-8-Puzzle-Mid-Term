@@ -1081,7 +1081,15 @@ class PUZZLE {
 }
 ```
 
-> Note: This is used before checking if the Puzzle (tile) can move on a specific area which is used in two Algorithms.
+<p align="center"> <img align="center" src="https://github.com/joemar25/Files/blob/main/ai-puzzle-can-move-u.png?raw=true" > </p>
+
+<p align="center"> <img align="center" src="https://github.com/joemar25/Files/blob/main/ai-puzzle-can-move-l.png?raw=true" > </p>
+
+<p align="center"> <img align="center" src="https://github.com/joemar25/Files/blob/main/ai-puzzle-can-move-d.png?raw=true" > </p>
+
+<p align="center"> <img align="center" src="https://github.com/joemar25/Files/blob/main/ai-puzzle-can-move-r.png?raw=true" > </p>
+
+> Note: This is used after checking if the Puzzle (tile) can move on a specific area which is used in two Algorithms.
 
 <br>
 
@@ -1208,6 +1216,10 @@ void IDS_Search(PUZZLE *initialState)
 ---
 
 <br>
+
+## Credits
+
+Creator of all illustrations  : [Joemar](https://github.com/joemar25 "Joemar's Github")
 
 ## References
 
