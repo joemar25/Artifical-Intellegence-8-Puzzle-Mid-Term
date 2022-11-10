@@ -978,7 +978,7 @@ Can Move Right()
 
 ```
 
-<p align="center"> <img align="center" src="https://github.com/joemar25/Files/blob/main/ai-puzzle-can-move-functions.png?raw=true" > </p>
+<p align="center"> <img align="center" src="https://github.com/joemar25/Files/blob/main/ai-puzzle-can-move-function.png?raw=true" > </p>
 
 ```c++
 class PUZZLE {
