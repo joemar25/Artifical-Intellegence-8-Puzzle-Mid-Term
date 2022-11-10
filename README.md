@@ -908,14 +908,14 @@ Can Move Down()
     
     for example: blank x is 1
         
-        blank.x > 0 returns true
+        blank.x < 2 returns true
 
         old -> [0,0], [0,1], [0,2]
         old -> [1,0], [1,1], [1,2]
         .        .      .      .
         .        .      .      .
 
-        since x will be increment by 1 if blank will go up
+        since x will be increment by 1 if blank will go down
 
         .        .      .      .
         .        .      .      .
@@ -949,7 +949,7 @@ Can Move Right()
     
     for example: blank y is 1
         
-        blank.y > 0 returns true
+        blank.y < 2 returns true
 
         old -> [0,0], [0,1]
         old -> [1,0], [1,1]
@@ -977,6 +977,8 @@ Can Move Right()
     -----------------------------------------------------------
 
 ```
+
+<p align="center"> <img align="center" src="https://github.com/joemar25/Files/blob/main/ai-puzzle-can-move-function.png?raw=true" > </p>
 
 ```c++
 class PUZZLE {
