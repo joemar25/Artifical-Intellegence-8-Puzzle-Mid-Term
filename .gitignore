@@ -5,4 +5,4 @@
 *.exe
 *.java
 *.class
-/markdownlint.json
+/.markdownlint.json
