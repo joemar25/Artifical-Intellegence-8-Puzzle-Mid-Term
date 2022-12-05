@@ -623,6 +623,8 @@ h gives how far the goal node is and g the number of nodes traversed from the
 For h, we will use the Manhattan distance, and for g, we will use the depth
   of the current node.
 
+ref: ai module 5, page 44
+
 f() - get the total cost, that will be used to select which move to pick as best state in bestState()
     1. Initialize 0, row difference = 0, column difference 0
     2. Set a pointer to null, this will hold an array value
