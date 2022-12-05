@@ -6,3 +6,4 @@
 *.java
 *.class
 /.markdownlint.json
+/.gitignore
