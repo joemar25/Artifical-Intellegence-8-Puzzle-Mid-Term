@@ -1,4 +1,4 @@
-<h1 align="center"> ⭐️⭐️⭐️ AI Midterm Project ⭐️⭐️⭐️<h1>
+<h1 align="center"> ⭐️⭐️⭐️ AI Midterm Project ⭐️⭐️⭐️</h1>
 
 This project is about showcasing how the IDS and A* Algorithms solve the 8-puzzle problem.
 
@@ -978,7 +978,7 @@ Can Move Right()
 
 ```
 
-<p align="center"> <img align="center" src="https://github.com/joemar25/Files/blob/main/ai-puzzle-can-move-function.png?raw=true" > </p>
+<p align="center"> <img align="center" src="https://github.com/joemar25/Files/blob/main/ai-puzzle-can-move-function.png?raw=true"> </p>
 
 ```c++
 class PUZZLE {
@@ -1094,7 +1094,20 @@ class PUZZLE {
 <br>
 
 ```txt
-display
+
+This function will display the path of the puzzle.
+Starting by ignoring the initial state (s).
+
+Display Path (puzzle as node)
+    1. Start
+    2. check if node is null
+        A. if true, return nothing
+    3. check node direction index 0 is not equal to S
+        A. call function display path (node) as recursive
+        B. display current node state
+    4. else do nothing
+    5. End.
+
 ```
 
 ```c++
@@ -1110,34 +1123,71 @@ void displayPath(PUZZLE *node)
 }
 ```
 
-> Note:
+> Note: This function is recursive. This is only used in A_Star since it A_Star returns less than IDS.
 
 <br>
 
 ```txt
+
+If we hit the end of list, we return from there. End of recursion.
+
+Move one node forward towards the end of list.
+
+While coming back from the end of list, start printing the node values. Last node will be first one in recursive open.
+
+Solution Path (puzzle as node)
+    1. Start
+    2. check if node is null
+        A. if true, return nothing
+    3. check node direction index 0 is not equal to S
+        A. call function solution path (node) as recursive
+        B. print current node direction index 0
+    4. else do nothing
+    5. End.
+
+result: U R U L D
+
 ```
 
 ```c++
 void solutionPath(PUZZLE *node)
 {
-    // If we hit the end of list, we return from there. End of recursion.
     if (node == nullptr)
         return;
     if (node->direction.move[0] != 'S')
     {
-        // Move one node forward towards the end of list.
         solutionPath(node->parent);
-        // While coming back from the end of list, start printing the node values. Last node will be first one in recursive open.
         std::cout << node->direction.move[0] << " ";
     }
 }
 ```
 
-> Note:
+> Note: This is used for both Algorithms on solving the puzzle.
 
 <br>
 
 ```txt
+AStar Search(initial state)
+    1. Start
+    2. Set counter to 0, for number of expanded node
+    3. Insert the initial state to open list
+    4. if open list is not empty
+        A. get best state from open list and remove state from open list (*)
+        B. insert the best state to the closed list
+        C. if best state is goal
+            a. Display result with expanded node
+            b. Go to 5
+        E. if best state can move up, check if it is already existing on closed list (*)
+            a. if true, then insert move up (*) to open list, else continue
+        F. if best state can move left, check if it is already existing on closed list (*)
+            a. if true, then insert move left (*) to open list, else continue
+        G. if best state can move down, check if it is already existing on closed list (*)
+            a. if true, then insert move down (*) to open list, else continue
+        H. if best state can move right, check if it is already existing on closed list (*)
+            a. if true, then insert move right (*) to open list, else continue
+        I. increment counter by 1
+        J. Go to 4
+    5. End
 ```
 
 ```c++

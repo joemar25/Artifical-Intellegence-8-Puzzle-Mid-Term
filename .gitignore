@@ -1,6 +1,5 @@
 /.vscode
 /includes
-/my_implementation_in_python
 *.c
 *.py
 *.exe
